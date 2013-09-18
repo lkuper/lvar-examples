@@ -14,6 +14,3 @@ f = do
 
 main = do
   putStrLn $ show $ runPar $ f
-
-
-  

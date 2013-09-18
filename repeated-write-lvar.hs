@@ -15,4 +15,4 @@ f = do
   return v
 
 main = do
-  putStrLn $ show $ runPar $ f
+  putStr $ show $ runPar $ f

@@ -20,5 +20,6 @@ If you want to be able to build `lvar-multiple-write.hs`, you will
 need the `lattice-par` package, which you can get from
 [here](https://github.com/iu-parfunc/lvars/tree/master/haskell/lattice-par)
 and `cabal install`.  **Warning!  This is research code!  It will eat
-your laundry!  If you like your Haskell environment just fine the way
-it is, you might consider waiting until there's a released version.**
+your laundry!  The API will change!  If you like your Haskell
+environment just fine the way it is, you might consider waiting until
+there's a released version.**

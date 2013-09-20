@@ -17,9 +17,17 @@
      prints that one value.
 	 
 If you want to be able to build `lvar-multiple-write.hs`, you will
-need the `lattice-par` package, which you can get from
-[here](https://github.com/iu-parfunc/lvars/tree/master/haskell/lattice-par)
-and `cabal install`.  **Warning!  This is research code!  It will eat
-your laundry!  The API will change!  If you like your Haskell
-environment just fine the way it is, you might consider waiting until
-there's a released version.**
+need the `lvish` package, which you can get from
+[here](https://github.com/iu-parfunc/lvars/tree/master/haskell/lvish)
+and `cabal install`:
+
+``` bash
+git clone git@github.com:iu-parfunc/lvars.git
+cd lvars/haskell/lvish/
+cabal install
+```
+
+**Warning!** If you install `lvish`, take note: **It is research code.
+Parts of it are broken.  The API will change.  It will eat your
+laundry.**
+

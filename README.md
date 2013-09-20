@@ -8,16 +8,20 @@
     race to write different values to an `IVar`, raising a `multiple
     put` error.
 	
-  * `ivar-multiple-write.hs`: An example of the limitations of
+  * `repeated-write-ivar.hs`: An example of the limitations of
     `IVar`s.  Two threads race to write the same value to an `IVar`,
     raising a `multiple put` error.
 	
-  * `lvar-multiple-write.hs`: Two threads race to write the same value
+  * `repeated-write-lvar.hs`: Two threads race to write the same value
      to an `LVar`, resulting in a program that deterministically
      prints that one value.
 	 
-If you want to be able to build `lvar-multiple-write.hs`, you will
-need the `lvish` package, which you can get from
+   * `repeated-write-lvar-wrong.hs`: Two threads race to write
+     _conflicting_ values to an `LVar`, resulting in a program
+     that deterministically raises an error.
+	 
+If you want to be able to build the latter two programs, you will need
+the `lvish` package, which you can get from
 [here](https://github.com/iu-parfunc/lvars/tree/master/haskell/lvish)
 and `cabal install`:
 

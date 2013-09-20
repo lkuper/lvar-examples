@@ -1,5 +1,5 @@
--- This program writes the same thing twice and deterministically
--- prints `3` instead of raising an error.
+-- This program attempts to do two conflicting writes to an LVar and
+-- deterministically raises an error.
 
 {-# LANGUAGE DataKinds #-}
 

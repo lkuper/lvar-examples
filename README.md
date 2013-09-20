@@ -16,9 +16,9 @@
      to an `LVar`, resulting in a program that deterministically
      prints that one value.
 	 
-   * `repeated-write-lvar-wrong.hs`: Two threads race to write
-     _conflicting_ values to an `LVar`, resulting in a program
-     that deterministically raises an error.
+  * `repeated-write-lvar-wrong.hs`: Two threads race to write
+     _conflicting_ values to an `LVar`, resulting in a program that
+     deterministically raises an error.
 	 
 If you want to be able to build the latter two programs, you will need
 the `lvish` package, which you can get from

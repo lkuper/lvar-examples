@@ -1,4 +1,4 @@
-# Some toy `MVar`, `IVar`, and `LVar` programs
+# Some example `MVar`, `IVar`, and `LVar` programs in Haskell
 
   * `data-race-example.hs`: An example of what we _don't_ want.  Two
     threads race to write different values to an `MVar`, resulting in

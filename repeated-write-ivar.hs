@@ -4,8 +4,8 @@
 
 import Control.Monad.Par
 
-f :: Par Int
-f = do
+p :: Par Int
+p = do
   i <- new
   fork $ do put i 3
   fork $ do put i 3
@@ -13,4 +13,4 @@ f = do
   return v
 
 main = do
-  putStr $ show $ runPar $ f
+  putStr $ show $ runPar $ p

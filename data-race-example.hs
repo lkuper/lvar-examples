@@ -4,10 +4,10 @@
 import Control.Concurrent
 
 main = do
-  i <- newEmptyMVar
-  forkIO $ do putMVar i 3
-  forkIO $ do putMVar i 4
-  v <- takeMVar i
+  num <- newEmptyMVar
+  forkIO $ do putMVar num 3
+  forkIO $ do putMVar num 4
+  v <- takeMVar num
   putStr $ show v -- nondeterministic -- could be either 3 or 4.  (In
                   -- practice, I seem to almost always get 4, with a
                   -- stray 3 now and then.)

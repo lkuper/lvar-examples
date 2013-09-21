@@ -8,10 +8,10 @@ import Data.LVar.IVar -- The particular lattice in question.
 
 f :: Par Det s Int
 f = do
-  i <- new
-  fork $ do put i 3
-  fork $ do put i 4
-  v <- get i
+  num <- new
+  fork $ do put num 3
+  fork $ do put num 4
+  v <- get num
   return v
 
 main = do

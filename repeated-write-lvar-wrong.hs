@@ -6,8 +6,8 @@
 import Control.LVish  -- Generic scheduler; works with any lattice.
 import Data.LVar.IVar -- The particular lattice in question.
 
-f :: Par Det s Int
-f = do
+p :: Par Det s Int
+p = do
   num <- new
   fork $ do put num 3
   fork $ do put num 4
@@ -15,4 +15,4 @@ f = do
   return v
 
 main = do
-  putStr $ show $ runPar $ f
+  putStr $ show $ runPar $ p

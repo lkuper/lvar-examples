@@ -19,5 +19,9 @@ repeated-write-lvar-wrong:
 	ghc -O2 repeated-write-lvar-wrong.hs -rtsopts -threaded
 	./repeated-write-lvar-wrong +RTS -N2
 
+repeated-write-lvar-max-counter:
+	ghc -O2 repeated-write-lvar-max-counter.hs -rtsopts -threaded
+	while true; do ./repeated-write-lvar-max-counter +RTS -N2; done
+
 clean:
-	rm *.hi *.o data-race-example ivar-example repeated-write-ivar repeated-write-lvar repeated-write-lvar-wrong
+	rm *.hi *.o data-race-example ivar-example repeated-write-ivar repeated-write-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter

@@ -1,5 +1,5 @@
 -- This program writes the same thing twice and deterministically
--- prints `3` instead of raising an error.
+-- prints `4` instead of raising an error.
 
 {-# LANGUAGE DataKinds #-}
 
@@ -9,8 +9,8 @@ import Data.LVar.IVar -- The particular lattice in question.
 p :: Par Det s Int
 p = do
   num <- new
-  fork $ do put num 3
-  fork $ do put num 3
+  fork $ do put num 4
+  fork $ do put num 4
   v <- get num
   return v
 

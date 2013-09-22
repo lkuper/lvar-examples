@@ -7,8 +7,8 @@ import Control.Monad.Par
 p :: Par Int
 p = do
   num <- new
-  fork $ do put num 3
-  fork $ do put num 3
+  fork $ do put num 4
+  fork $ do put num 4
   v <- get num
   return v
 

@@ -8,11 +8,11 @@
     race to write different values to an `IVar`, raising a `multiple
     put` error.
 	
-  * `repeated-3-ivar.hs`: An example of the limitations of `IVar`s.
+  * `repeated-4-ivar.hs`: An example of the limitations of `IVar`s.
     Two threads race to write the same value to an `IVar`, raising a
     `multiple put` error.
 	
-  * `repeated-3-lvar.hs`: Two threads race to write the same value to
+  * `repeated-4-lvar.hs`: Two threads race to write the same value to
      an `LVar`, resulting in a program that deterministically prints
      that one value.
 	 

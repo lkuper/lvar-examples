@@ -3,6 +3,7 @@
 
 import Control.Concurrent
 
+p :: IO Int
 p = do
   num <- newEmptyMVar
   forkIO $ do putMVar num 3

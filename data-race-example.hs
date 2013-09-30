@@ -6,10 +6,9 @@ import Control.Concurrent
 p :: IO Int
 p = do
   num <- newEmptyMVar
-  forkIO $ do putMVar num 3
-  forkIO $ do putMVar num 4
-  v <- takeMVar num
-  return v
+  forkIO $ putMVar num 3
+  forkIO $ putMVar num 4
+  takeMVar num
 
 main = do
   v <- p

@@ -21,7 +21,10 @@
      deterministically raises an error.
 	 
 If you want to be able to build the latter two programs, you will need
-the `lvish` package, which you can get from
+the `lvish` package, which you can install
+[from Hackage](http://hackage.haskell.org/package/lvish) by running
+`cabal install lvish` (perhaps preceded by `cabal update`).  If you
+want the bleeding-edge version, you can also get it from
 [here](https://github.com/iu-parfunc/lvars/tree/master/haskell/lvish)
 and `cabal install`:
 
@@ -31,7 +34,6 @@ cd lvars/haskell/lvish/
 cabal install
 ```
 
-**Warning!** If you install `lvish`, take note: **It is research code.
-Parts of it are broken.  The API will change.  It will eat your
-laundry.**
+The usual caveats about research code apply: **Parts of it are broken.
+The API will change.  It will eat your laundry.**
 

@@ -23,9 +23,9 @@ repeated-write-lvar-max-counter:
 	ghc -O2 repeated-write-lvar-max-counter.hs -rtsopts -threaded
 	while true; do ./repeated-write-lvar-max-counter +RTS -N2; done
 
-pair-lvar-example:
+pair-lvar:
 	ghc -O2 pair-lvar-example.hs -rtsopts -threaded
-	while true; do ./pair-lvar-example +RTS -N2; done
+	while true; do ./pair-lvar +RTS -N2; done
 
 parallel-and:
 	ghc -O2 parallel-and.hs -rtsopts -threaded

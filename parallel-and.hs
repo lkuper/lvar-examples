@@ -10,7 +10,7 @@ the code that might break determinism from the code that cannot.
 (Perversely, the code that might break determinism is called the
 "trusted code", while the code that can't is "untrusted".)
 
-Coming soon: a blog post explaining this code in detail:
+Coming soon: a blog post explaining this code in detail.
 
 -}
 
@@ -86,36 +86,36 @@ getResult :: Result s -> Par d s State
 getResult avr = getPureLVar avr [TrueTrue, F]
 
 -- Now we can define an `asyncAnd` operation, which is the only way to
--- write to a `Result`.  It takes two values of type `Bool`, creates a
--- new LVar, launches two threads that each write a `State` into the
--- shared LVar, and finally gets and returns the result.  If the
--- result is neither `TrueTrue` nor `F`, the `getResult` call will block.
-asyncAnd :: Bool ->  Bool -> Par d s Bool 
-asyncAnd b1 b2 = do
+-- write to a `Result`.  It takes two values of type `Bool` (each
+-- wrapped in a Par computation), creates a new LVar, launches two
+-- threads that each write a `State` into the shared LVar, and finally
+-- gets and returns the result.  If the result is neither `TrueTrue`
+-- nor `F`, the `getResult` call will block.
+asyncAnd :: Par d s Bool -> Par d s Bool -> Par d s Bool 
+asyncAnd m1 m2 = do
   res <- newPureLVar Bot
-  fork $ do putPureLVar res (if b1 then TrueBot else F)
-  fork $ do putPureLVar res (if b2 then BotTrue else F)
+  fork $ do b1 <- m1; putPureLVar res (if b1 then TrueBot else F)
+  fork $ do b2 <- m2; putPureLVar res (if b2 then BotTrue else F)
   x <- getResult res
-  return (x == TrueTrue)
+  -- $! is strict function application.
+  return $! (x == TrueTrue)
 
--- The main function just runs a bunch of calls to asyncAnd.
+-- The main function just runs a bunch of calls to asyncAnd, all of
+-- which should return False.
 main = do
-
- -- True and False result in false, of course.
+ -- True and False result in False, of course.
  putStrLn $ show $ runPar $ 
-   asyncAnd True False
+   asyncAnd (return True) (return False)
 
  -- Folding asyncAnd over a big list of alternating Trues and Falses.
  putStrLn $ show $ runPar $ 
-   foldrM asyncAnd True (concat $ replicate 100 [True, False])
+   foldr asyncAnd (return True) (concat $ replicate 100 [return True, return False])
 
- -- Here's a list of Trues with a stray False in the middle.  This is
- -- buggy!  The more Trues there are, the worse it gets.  I don't yet
- -- know what's wrong.
+ -- Here's a list of lots of Trues with a stray False in the middle.
  putStrLn $ show $ runPar $ 
-   foldrM asyncAnd True (concat [replicate 100 True,
-                                 [False],
-                                 replicate 100 True])
+   foldr asyncAnd (return True) (concat [replicate 100 (return True),
+                                         [return False],
+                                         replicate 100 (return True)])
 
 -- Just for the sake of convincing ourselves that `joinStates` is
 -- defined correctly, here's a function to print the result of calling

@@ -9,8 +9,8 @@ import Data.LVar.IVar -- The particular lattice in question.
 p :: Par Det s Int
 p = do
   num <- new
-  fork $ put num 3
-  fork $ put num 4
+  fork (put num 3)
+  fork (put num 4)
   get num
 
 main = do

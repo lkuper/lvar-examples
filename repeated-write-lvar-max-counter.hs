@@ -11,9 +11,9 @@ import Data.LVar.MaxCounter -- The particular lattice in question.
 p :: Par Det s ()
 p = do
   num <- newMaxCounter 0
-  fork $ put num 3
-  fork $ put num 4
+  fork (put num 3)
+  fork (put num 4)
   waitThresh num 4
 
 main = do
-  putStr $ show $ runPar $ p
+  putStr $ show $ runPar p

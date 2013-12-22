@@ -4,6 +4,9 @@
 
 {-# LANGUAGE DataKinds #-}
 
+-- We have to hide `put` here because Control.Lvish re-exports the
+-- usual IVar operations, including `put`, and that also happens to be
+-- the name of the write operation for MaxCounter.
 import Control.LVish hiding (put) -- Generic scheduler; works with any lattice.
 import Data.LVar.MaxCounter -- The particular lattice in question.
 

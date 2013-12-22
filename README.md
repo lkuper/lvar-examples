@@ -1,4 +1,4 @@
-# Some example `LVar` programs in Haskell
+# Programming with LVars and LVish, by example
 
 _LVars_ are monotonically growing, lattice-based data structures for
 deterministic parallel programming.

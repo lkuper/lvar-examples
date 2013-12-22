@@ -42,37 +42,39 @@ data State = Bot | TrueBot | BotTrue | TrueTrue | F | Top
 -- express the expectation that such a `join` exists using
 -- `JoinSemiLattice` typeclass constraints.  So, we'll need to provide
 -- the join operation in our own code and declare `State` to be an
--- instance of `JoinSemiLattice`.  Additionally, `newPureLVar`
--- requires that we designate a bottom state, so we need to do that as
--- well.
-instance BoundedJoinSemiLattice State where
-  bottom = Bot
-
+-- instance of `JoinSemiLattice`.
 instance JoinSemiLattice State where
   join = joinStates
+
+-- Additionally, `newPureLVar` takes a starting state as argument and
+-- requires that it be an instance of `BoundedJoinSemiLattice`, so we
+-- have to declare `State` to be an instance of that.  (The constraint
+-- seems unnecessary to me, actually, but as long as it's there, we
+-- need this instance declaration.)
+instance BoundedJoinSemiLattice State where
+  bottom = Bot
 
 -- The joinStates function computes the least upper bound of its
 -- arguments.
 joinStates :: State -> State -> State
--- Case (1): Joining an element with itself results in that element.
+-- Joining an element with itself results in that element.
 joinStates x y | x == y = x
 
--- Case (2): Joining an element with `Bot` results in that element.
+-- Joining an element with `Bot` results in that element.
 joinStates Bot x = x
 
--- Case (3): Joining an element with `Top` results in `Top`, in
--- either order.
+-- Joining an element with `Top` results in `Top`, in either order.
 joinStates Top _ = Top
 joinStates _ Top = Top
 
--- Case (4): Interesting cases involving `TrueTrue` or `F`.
+-- Interesting cases involving `TrueTrue` or `F`.
 joinStates TrueBot BotTrue = TrueTrue
 joinStates TrueTrue TrueBot = TrueTrue
 joinStates TrueTrue BotTrue = TrueTrue
 joinStates F TrueTrue = Top
-joinStates F  _  = F
+joinStates F _  = F
 
--- Case (5): Join is commutative.
+-- Join is commutative.
 joinStates x y = joinStates y x
 
 -- Now we're finally ready to define what the API to a `Result` will

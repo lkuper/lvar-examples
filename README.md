@@ -27,10 +27,12 @@ released version.  Sorry.
 
 ## Running the examples
 
-The `Makefile` contains one target for each example program.  Every targets both builds and runs an example, often in an infinite loop, to illustrate the example program's determinism or lack thereof.  An example run might look something like this:
+The `Makefile` contains one target for each example program.  Each
+target builds and then runs a program, often in an infinite loop to
+illustrate the program's determinism or lack thereof.  For instance:
 
 ``` bash
-landin:lvar-examples lkuper$ make repeated-4-lvar
+$ make repeated-4-lvar
 ghc -O2 repeated-4-lvar.hs -rtsopts -threaded
 Linking repeated-4-lvar ...
 while true; do ./repeated-4-lvar +RTS -N2; done

@@ -1,4 +1,4 @@
-# Programming with LVars and LVish, by example
+# Programming with LVars, by example
 
 _LVars_ are monotonically growing, lattice-based data structures for
 deterministic parallel programming.

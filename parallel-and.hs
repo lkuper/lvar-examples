@@ -16,7 +16,7 @@ Coming soon: a blog post explaining this code in detail.
 
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
-module Main(asyncAnd, main, runPar, printAllJoins) where
+module Main(asyncAnd, main, runPar, printAllJoins, compareJoinAndMyLeq) where
 
 -- Don't use `asyncAnd` from the LVish library, because we're going to
 -- define our own version of it.
@@ -56,6 +56,21 @@ instance JoinSemiLattice State where
 -- need this instance declaration.)
 instance BoundedJoinSemiLattice State where
   bottom = Bot
+
+
+myLeq :: State -> State -> Bool
+myLeq x y | x == y = True
+myLeq Bot _ = True
+myLeq _ Top = True
+
+myLeq TrueBot TrueTrue = True
+myLeq TrueBot F = True
+
+myLeq BotTrue TrueTrue = True
+myLeq BotTrue F = True
+
+myLeq _ _ = False
+
 
 -- The joinStates function computes the least upper bound of its
 -- arguments.
@@ -117,9 +132,7 @@ main = do
 
  -- Here's a list of lots of Trues with a stray False in the middle.
  putStrLn $ show $ runPar $ 
-   foldr asyncAnd (return True) (concat [replicate 100 (return True),
-                                         [return False],
-                                         replicate 100 (return True)])
+   foldr asyncAnd (return True) (concat [replicate 100 (return True), [return False], replicate 100 (return True)])
 
 -- Just for the sake of convincing ourselves that `joinStates` is
 -- defined correctly, here's a function to print the result of calling
@@ -173,3 +186,44 @@ printAllJoins = do
 "join Top Top = Top"
 
 -}
+
+{- The fishy part: This definition of `join` is not associative!
+
+For associativity to hold, it has to be the case that
+
+  x `join` (y `join` z) = (x `join` y) `join` z
+
+However, according to the above definition of `join`, this is not the
+case, because:
+
+  TrueBot `join` (BotTrue `join` F) =
+  TrueBot `join` F =
+  F
+
+  (TrueBot `join` BotTrue) `join` F =
+  TrueTrue `join` F =
+  Top
+
+So our join-semilattice is not really a join-semilattice!  With this
+bug in the algebraic interpretation of the lattice, there ought to
+also be a bug in the order-theoretic interpretation.  In other words,
+shouldn't there be a place where
+
+    y == x `join` y iff x <= y
+
+fails to hold?  But I can't find it!
+
+-}
+
+compareJoinAndMyLeq = do
+  putStrLn $ showStrings
+    [show [x,  y] ++ ": " ++
+
+     -- Check that the result of "y == x `join` y" is the same as the
+     -- result of "x `myLeq` y".
+     show [(y == x `joinStates` y), (x `myLeq` y)]
+    | x <- [Bot .. Top],
+      y <- [Bot .. Top]]
+  where showStrings strings = case strings of
+          [] -> ""
+          (x : xs) -> x ++ "\n" ++ showStrings xs

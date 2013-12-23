@@ -27,9 +27,8 @@ import Control.LVish hiding (asyncAnd)
 -- along with some functions that operate on PureLVars.
 import Data.LVar.Internal.Pure (PureLVar, newPureLVar, putPureLVar, getPureLVar)
 
--- A couple other things we'll need later.
+-- We'll need this later.
 import Algebra.Lattice
-import Data.Foldable (foldrM)
 
 -- OK, we're ready to define the `Result` type: the type of the
 -- result of a parallel logical "and" operation.

@@ -16,7 +16,7 @@ Coming soon: a blog post explaining this code in detail.
 
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
-module Main(asyncAnd, main, runPar, printAllJoins, compareJoinAndMyLeq) where
+module Main(asyncAnd, main, runPar, printAllJoins, testJoin) where
 
 -- Don't use `asyncAnd` from the LVish library, because we're going to
 -- define our own version of it.
@@ -204,26 +204,53 @@ case, because:
   TrueTrue `join` F =
   Top
 
-So our join-semilattice is not really a join-semilattice!  With this
-bug in the algebraic interpretation of the lattice, there ought to
-also be a bug in the order-theoretic interpretation.  In other words,
-shouldn't there be a place where
+So our join-semilattice is not really a join-semilattice!
 
-    y == x `join` y iff x <= y
+Now, the following are equivalent:
 
-fails to hold?  But I can't find it!
+  (1) S is a join-semilattice.
+
+  (2) For all elements x and y of S, the lub of the set {x, y} exists.
+
+  (3) For all elements x, y, and z of S, the following properties hold:
+  - Associativity: x `join` (y `join` z) == (x `join` y) `join` z
+  - Commutativity: x `join` y == y `join` x
+  - Idempotence: x `join` x == x
+
+So it must be the case that (2) doesn't actually hold, even though we
+wrote down the definition for `join`.  The `join` we wrote down must
+not actually compute a least upper bound!
+
+How can we tell if `join` actually computes a least upper bound?  It
+would suffice for the following two properties to hold:
+
+  * For all elements v1, v2, and v of S,
+    if v1 <= v and v2 <= v, then (v1 `join` v2) <= v.
+
+  * For all elements v1 and v2 of S,
+    v1 <= (v1 `join` v2) and v2 <= (v1 `join` v2).
+
+For us, the first of these does not hold! TrueBot <= F and BotTrue <=
+F, but (TrueBot `join` BotTrue) == TrueTrue, which is not <= F.
+
+Another way to put it: since `TrueTrue` and `F` are both upper bounds
+of {`TrueBot`, `BotTrue`}, and neither `TrueTrue` nor `F` is less than
+the other, then {`TrueBot`, `BotTrue`} doesn't actually have a lub,
+regardless of what the definition of `join` claims it is.
 
 -}
 
-compareJoinAndMyLeq = do
+-- Here's some code to help check the first of the above two
+-- properties.
+testJoin = do
   putStrLn $ showStrings
-    [show [x,  y] ++ ": " ++
-
-     -- Check that the result of "y == x `join` y" is the same as the
-     -- result of "x `myLeq` y".
-     show [(y == x `joinStates` y), (x `myLeq` y)]
-    | x <- [Bot .. Top],
-      y <- [Bot .. Top]]
+    [show [v1, v2, v] ++ ": " ++
+     show (if (v1 `joinLeq` v && v2 `joinLeq` v)
+           then (v1 `join` v2) `joinLeq` v
+           else True) -- if the premise doesn't hold, no problem
+    | v1 <- [Bot .. Top],
+      v2 <- [Bot .. Top],
+      v  <- [Bot .. Top]]
   where showStrings strings = case strings of
           [] -> ""
           (x : xs) -> x ++ "\n" ++ showStrings xs

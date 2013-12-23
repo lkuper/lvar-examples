@@ -99,8 +99,7 @@ asyncAnd m1 m2 = do
   fork $ do b1 <- m1; putPureLVar res (if b1 then TrueBot else F)
   fork $ do b2 <- m2; putPureLVar res (if b2 then BotTrue else F)
   x <- getResult res
-  -- $! is strict function application.
-  return $! (x == TrueTrue)
+  return (x == TrueTrue)
 
 -- The main function just runs a bunch of calls to asyncAnd, all of
 -- which should return False.

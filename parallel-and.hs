@@ -14,6 +14,10 @@ Coming soon: a blog post explaining this code in detail.
 
 -}
 
+-- Make this a proper module, and export some stuff so we can play
+-- with it in ghci.
+module Main(asyncAnd, main, runPar, printAllJoins) where
+
 -- Don't use `asyncAnd` from the LVish library, because we're going to
 -- define our own version of it.
 import Control.LVish hiding (asyncAnd)

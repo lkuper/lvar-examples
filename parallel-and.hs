@@ -16,8 +16,8 @@ Coming soon: a blog post explaining this code in detail.
 
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
-module Main(asyncAnd, main, runPar, printAllJoins,
-            testJoin, verifyFiniteJoin) where
+module Main(asyncAnd, main, runPar, joinStates,
+            printAllJoins, testJoin, verifyFiniteJoin) where
 
 -- Don't use `asyncAnd` from the LVish library, because we're going to
 -- define our own version of it.

@@ -16,7 +16,8 @@ Coming soon: a blog post explaining this code in detail.
 
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
-module Main(asyncAnd, main, runPar, printAllJoins) where
+module Main(asyncAnd, main, runPar, printAllJoins,
+            verifyFiniteJoin) where
 
 -- Don't use `asyncAnd` from the LVish library, because we're going to
 -- define our own version of it.
@@ -24,8 +25,10 @@ import Control.LVish hiding (asyncAnd)
 
 -- Now let's import some stuff we need to define our own LVar.  We'll
 -- be using the `PureLVar` type provided by Data.LVar.Internal.Pure,
--- along with some functions that operate on PureLVars.
-import Data.LVar.Internal.Pure (PureLVar, newPureLVar, putPureLVar, getPureLVar)
+-- along with some functions that operate on PureLVars and the
+-- verifyFiniteJoin function.
+import Data.LVar.Internal.Pure (PureLVar, newPureLVar, putPureLVar,
+                                getPureLVar, verifyFiniteJoin)
 
 -- We'll need this later.
 import Algebra.Lattice

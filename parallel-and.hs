@@ -17,7 +17,7 @@ Coming soon: a blog post explaining this code in detail.
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
 module Main(asyncAnd, main, runPar, printAllJoins,
-            verifyFiniteJoin) where
+            testJoin, verifyFiniteJoin) where
 
 -- Don't use `asyncAnd` from the LVish library, because we're going to
 -- define our own version of it.
@@ -59,6 +59,21 @@ instance JoinSemiLattice State where
 -- need this instance declaration.)
 instance BoundedJoinSemiLattice State where
   bottom = Bot
+
+
+myLeq :: State -> State -> Bool
+myLeq x y | x == y = True
+myLeq Bot _ = True
+myLeq _ Top = True
+
+myLeq TrueBot TrueTrue = True
+myLeq TrueBot F = True
+
+myLeq BotTrue TrueTrue = True
+myLeq BotTrue F = True
+
+myLeq _ _ = False
+
 
 -- The joinStates function computes the least upper bound of its
 -- arguments.
@@ -120,9 +135,7 @@ main = do
 
  -- Here's a list of lots of Trues with a stray False in the middle.
  putStrLn $ show $ runPar $ 
-   foldr asyncAnd (return True) (concat [replicate 100 (return True),
-                                         [return False],
-                                         replicate 100 (return True)])
+   foldr asyncAnd (return True) (concat [replicate 100 (return True), [return False], replicate 100 (return True)])
 
 -- Just for the sake of convincing ourselves that `joinStates` is
 -- defined correctly, here's a function to print the result of calling
@@ -176,3 +189,71 @@ printAllJoins = do
 "join Top Top = Top"
 
 -}
+
+{- The fishy part: This definition of `join` is not associative!
+
+For associativity to hold, it has to be the case that
+
+  x `join` (y `join` z) = (x `join` y) `join` z
+
+However, according to the above definition of `join`, this is not the
+case, because:
+
+  TrueBot `join` (BotTrue `join` F) =
+  TrueBot `join` F =
+  F
+
+  (TrueBot `join` BotTrue) `join` F =
+  TrueTrue `join` F =
+  Top
+
+So our join-semilattice is not really a join-semilattice!
+
+Now, the following are equivalent:
+
+  (1) S is a join-semilattice.
+
+  (2) For all elements x and y of S, the lub of the set {x, y} exists.
+
+  (3) For all elements x, y, and z of S, the following properties hold:
+  - Associativity: x `join` (y `join` z) == (x `join` y) `join` z
+  - Commutativity: x `join` y == y `join` x
+  - Idempotence: x `join` x == x
+
+So it must be the case that (2) doesn't actually hold, even though we
+wrote down the definition for `join`.  The `join` we wrote down must
+not actually compute a least upper bound!
+
+How can we tell if `join` actually computes a least upper bound?  It
+would suffice for the following two properties to hold:
+
+  * For all elements v1, v2, and v of S,
+    if v1 <= v and v2 <= v, then (v1 `join` v2) <= v.
+
+  * For all elements v1 and v2 of S,
+    v1 <= (v1 `join` v2) and v2 <= (v1 `join` v2).
+
+For us, the first of these does not hold! TrueBot <= F and BotTrue <=
+F, but (TrueBot `join` BotTrue) == TrueTrue, which is not <= F.
+
+Another way to put it: since `TrueTrue` and `F` are both upper bounds
+of {`TrueBot`, `BotTrue`}, and neither `TrueTrue` nor `F` is less than
+the other, then {`TrueBot`, `BotTrue`} doesn't actually have a lub,
+regardless of what the definition of `join` claims it is.
+
+-}
+
+-- Here's some code to help check the first of the above two
+-- properties.
+testJoin = do
+  putStrLn $ showStrings
+    [show [v1, v2, v] ++ ": " ++
+     show (if (v1 `joinLeq` v && v2 `joinLeq` v)
+           then (v1 `join` v2) `joinLeq` v
+           else True) -- if the premise doesn't hold, no problem
+    | v1 <- [Bot .. Top],
+      v2 <- [Bot .. Top],
+      v  <- [Bot .. Top]]
+  where showStrings strings = case strings of
+          [] -> ""
+          (x : xs) -> x ++ "\n" ++ showStrings xs

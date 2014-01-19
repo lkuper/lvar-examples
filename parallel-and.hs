@@ -10,7 +10,9 @@ the code that might break determinism from the code that cannot.
 (Perversely, the code that might break determinism is called the
 "trusted code", while the code that can't is "untrusted".)
 
-Coming soon: a blog post explaining this code in detail.
+The blog post
+http://composition.al/blog/2013/12/24/the-lvar-that-wasnt/ explains
+what's going on here in detail.
 
 -}
 

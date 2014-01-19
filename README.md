@@ -74,9 +74,13 @@ These five examples are documented in
      deterministically end up as the maximum of the two writes.
 	 
 ### Parallel logical "and"
+
+This example is documented in a blog post,
+["The LVar that wasn't"](http://composition.al/blog/2013/12/24/the-lvar-that-wasnt/).
   
   * `parallel-and.hs`: Two threads race to write to an `LVar` that
-    stores the result of a parallel logical "and" operation.
+    stores the result of a parallel logical "and" operation.  But
+    something is fishy...
 	
 ### Shopping cart examples
 

@@ -31,10 +31,6 @@ parallel-and:
 	ghc -O2 parallel-and.hs -rtsopts -threaded
 	while true; do ./parallel-and +RTS -N2; done
 
-set-data-race:
-	ghc -O2 set-data-race.hs -rtsopts -threaded
-	while true; do ./set-data-race +RTS -N2; done
-
 set-ioref-data-race:
 	ghc -O2 set-ioref-data-race.hs -rtsopts -threaded
 	while true; do ./set-ioref-data-race +RTS -N2; done
@@ -43,5 +39,21 @@ set-synchronized:
 	ghc -O2 set-synchronized.hs -rtsopts -threaded
 	while true; do ./set-synchronized +RTS -N2; done
 
+set-lvar-waitsize:
+	ghc -O2 set-lvar-waitsize.hs -rtsopts -threaded
+	while true; do ./set-lvar-waitsize +RTS -N2; done
+
+set-lvar-waitelem:
+	ghc -O2 set-lvar-waitelem.hs -rtsopts -threaded
+	while true; do ./set-lvar-waitelem +RTS -N2; done
+
+set-lvar-freezeafter:
+	ghc -O2 set-lvar-freezeafter.hs -rtsopts -threaded
+	while true; do ./set-lvar-freezeafter +RTS -N2; done
+
+set-lvar-quasi:
+	ghc -O2 set-lvar-quasi.hs -rtsopts -threaded
+	while true; do ./set-lvar-quasi +RTS -N2; done
+
 clean:
-	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-data-race set-ioref-data-race set-synchronized
+	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi

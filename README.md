@@ -88,6 +88,23 @@ These five examples are documented in
     enough synchronization to be deterministic, but only because it
     manually calls `wait` in the right places.
 	
+  * `set-lvar-waitsize.hs`: A version of the shopping cart program
+    where we represent the cart as a `Data.LVar.PureSet`.
+    Synchronizes on the size of the cart with a call to `waitSize`,
+    then freezes and returns the cart's contents.  It is guaranteed to
+    be quasi-deterministic (which is already a stronger guarantee than
+    we have of the `IORef` version), and in fact it is deterministic
+    (but only because we put the call to `waitSize` in the right
+    place).
+	
+  * `set-lvar-waitelem.hs`: A version of the shopping cart program
+    where, instead of using `Data.LVar.PureSet`, we roll our own LVar
+    type using a `PureLVar` and our own `CartState` type and
+    `joinCartStates` operation.  It is guaranteed to be deterministic,
+    and it thresholds on the `Both` state; no explicit barrier
+    operations required.  (But this isn't a particularly interesting
+    threshold -- ask for `Both`, get `Both`.)
+	
 ### Not working yet
 
   * `pair-lvar.hs`: This one doesn't work, since LVish doesn't

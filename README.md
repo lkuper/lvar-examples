@@ -77,6 +77,17 @@ These five examples are documented in
   * `parallel-and.hs`: Two threads race to write to an `LVar` that
     stores the result of a parallel logical "and" operation.
 	
+### Shopping cart examples
+
+  * `set-ioref-data-race.hs`: Two threads add items to a shopping
+    cart, represented as an `IORef` containing a `Data.Set`, and a
+    third thread reads the cart's contents, which are nondeterministic
+    because the program is undersynchronized.
+	
+  * `set-synchronized.hs`: A revised version of the above program with
+    enough synchronization to be deterministic, but only because it
+    manually calls `wait` in the right places.
+	
 ### Not working yet
 
   * `pair-lvar.hs`: This one doesn't work, since LVish doesn't

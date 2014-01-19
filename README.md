@@ -84,6 +84,8 @@ This example is documented in a blog post,
 	
 ### Shopping cart examples
 
+#### Sets
+
   * **Nondeterministic**: `set-ioref-data-race.hs`. Two threads add
     items to a shopping cart, represented as an `IORef` containing a
     `Data.Set`, and a third thread reads the cart's contents, which
@@ -141,6 +143,32 @@ This example is documented in a blog post,
     quasi-deterministic, but not deterministic, and so we have to run
     it with `runParIO`.
 	
+#### Maps
+
+Maps are more interesting than sets to threshold on because it's
+possible to threshold on the key and get back the value.
+
+  * `map-lvar-ioref-data-race.hs`
+  
+  * `map-lvar-synchronized.hs`
+  
+  * `map-lvar-waitsize.hs`
+
+  * `map-lvar-getkey.hs`: An experiment in implementing our own map
+    LVar using a `PureLVar`, much as `set-lvar-waitelem.hs` does for
+    sets.  The encoding is hilariously baroque, but the idea is that
+    threshold reads are more interesting than for sets: instead of
+    just finding out that the element you asked for is now in the set,
+    with maps it's possible to get back the value associated with a
+    key, by providing a threshold set of _all the keys_ that might be
+    associated with this value.  (This only works if the map values
+    are immutable, though!  A more interesting map would have LVars as
+    values.)
+
+  * `map-lvar-freezeafter.hs`
+
+  * `map-lvar-quasi.hs`
+
 ### Not working yet
 
   * `pair-lvar.hs`: This one doesn't work, since LVish doesn't

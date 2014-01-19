@@ -89,7 +89,7 @@ These five examples are documented in
     enough synchronization to be deterministic, but only because it
     manually calls `wait` in the right places.
 	
-  * **Determinstic with a quasi-determinism-by-construction
+  * **Deterministic with a quasi-determinism-by-construction
     guarantee**: `set-lvar-waitsize.hs`. A version of the shopping
     cart program where we represent the cart as a `Data.LVar.PureSet`
     of `Item`s (where an `Item` is either a `Book` or `Shoes`, because

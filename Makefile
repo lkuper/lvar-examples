@@ -55,5 +55,29 @@ set-lvar-quasi:
 	ghc -O2 set-lvar-quasi.hs -rtsopts -threaded
 	while true; do ./set-lvar-quasi +RTS -N2; done
 
+map-ioref-data-race:
+	ghc -O2 map-ioref-data-race.hs -rtsopts -threaded
+	while true; do ./map-ioref-data-race +RTS -N2; done
+
+map-synchronized:
+	ghc -O2 map-synchronized.hs -rtsopts -threaded
+	while true; do ./map-synchronized +RTS -N2; done
+
+map-lvar-waitsize:
+	ghc -O2 map-lvar-waitsize.hs -rtsopts -threaded
+	while true; do ./map-lvar-waitsize +RTS -N2; done
+
+map-lvar-getkey:
+	ghc -O2 map-lvar-getkey.hs -rtsopts -threaded
+	while true; do ./map-lvar-getkey +RTS -N2; done
+
+map-lvar-freezeafter:
+	ghc -O2 map-lvar-freezeafter.hs -rtsopts -threaded
+	while true; do ./map-lvar-freezeafter +RTS -N2; done
+
+map-lvar-quasi:
+	ghc -O2 map-lvar-quasi.hs -rtsopts -threaded
+	while true; do ./map-lvar-quasi +RTS -N2; done
+
 clean:
-	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi
+	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi map-ioref-data-race map-synchronized map-lvar-waitsize map-lvar-getkey map-lvar-freezeafter map-lvar-quasi

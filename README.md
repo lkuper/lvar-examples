@@ -4,7 +4,8 @@ _LVars_ are monotonically growing, lattice-based data structures for
 deterministic parallel programming.
 [LVish](http://hackage.haskell.org/package/lvish) is a Haskell library
 for programming with LVars.  This repository contains toy examples of
-programs that use LVars and LVish.
+programs that use LVars and LVish, as well as a few that _don't_ use
+LVars but are there for illustrative purposes.
 
 ## Installing LVish
 

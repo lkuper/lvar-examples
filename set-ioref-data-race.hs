@@ -1,7 +1,6 @@
 -- A nondeterministic program.
 
 import Control.Concurrent.Async
-import Control.Concurrent
 import Data.IORef
 import Data.Set
 

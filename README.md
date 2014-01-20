@@ -160,10 +160,10 @@ possible to threshold on the key and get back the value.
     threshold reads are more interesting than for sets: instead of
     just finding out that the element you asked for is now in the set,
     with maps it's possible to get back the value associated with a
-    key, by providing a threshold set of _all the keys_ that might be
-    associated with this value.  (This only works if the map values
-    are immutable, though!  A more interesting map would have LVars as
-    values.)
+    key, by providing a threshold set of _all the values_ that might
+    be associated with that key.  (This only works if the map values
+    are immutable, though!  An even more interesting map would have
+    LVars as values.)
 
   * `map-lvar-freezeafter.hs`
 

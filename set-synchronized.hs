@@ -14,11 +14,9 @@ p :: IO (Set Item)
 p = do cart <- newIORef empty
        a1 <- async $ atomicModifyIORef cart (\s -> (insert Book s, ()))
        a2 <- async $ atomicModifyIORef cart (\s -> (insert Shoes s, ()))
-       res <- async $ do wait a1
-                         wait a2
+       res <- async $ do waitBoth a1 a2
                          readIORef cart
        wait res
 
 main = do v <- p
           putStr $ show $ toList v
-                                    

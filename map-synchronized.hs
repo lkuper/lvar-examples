@@ -10,11 +10,9 @@ p :: IO (Map Item Int)
 p = do cart <- newIORef empty
        a1 <- async $ atomicModifyIORef cart (\c -> (insert Book 1 c, ()))
        a2 <- async $ atomicModifyIORef cart (\c -> (insert Shoes 1 c, ()))
-       res <- async $ do wait a1
-                         wait a2
+       res <- async $ do waitBoth a1 a2
                          readIORef cart
        wait res
 
 main = do v <- p
           putStr $ show $ toList v
-                                    

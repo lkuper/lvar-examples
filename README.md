@@ -164,6 +164,9 @@ possible to threshold on the key and get back the value.
     be associated with that key.  (This only works if the map values
     are immutable, though!  An even more interesting map would have
     LVars as values.)
+	
+  * `map-lvar-getkey-lib.hs`: Does the same thing as the above, but
+    uses the built-in LVish `PureMap` instead of rolling our own LVar.
 
   * `map-lvar-freezeafter.hs`
 

@@ -71,6 +71,10 @@ map-lvar-getkey:
 	ghc -O2 map-lvar-getkey.hs -rtsopts -threaded
 	while true; do ./map-lvar-getkey +RTS -N2; done
 
+map-lvar-getkey-lib:
+	ghc -O2 map-lvar-getkey-lib.hs -rtsopts -threaded
+	while true; do ./map-lvar-getkey-lib +RTS -N2; done
+
 map-lvar-freezeafter:
 	ghc -O2 map-lvar-freezeafter.hs -rtsopts -threaded
 	while true; do ./map-lvar-freezeafter +RTS -N2; done
@@ -80,4 +84,4 @@ map-lvar-quasi:
 	while true; do ./map-lvar-quasi +RTS -N2; done
 
 clean:
-	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi map-ioref-data-race map-synchronized map-lvar-waitsize map-lvar-getkey map-lvar-freezeafter map-lvar-quasi
+	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi map-ioref-data-race map-synchronized map-lvar-waitsize map-lvar-getkey map-lvar-getkey-lib map-lvar-freezeafter map-lvar-quasi

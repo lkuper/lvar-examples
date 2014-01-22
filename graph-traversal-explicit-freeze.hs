@@ -32,21 +32,23 @@ neighbors g v =
   map snd edgesFromNode where
     edgesFromNode = filter (\(v1, _) -> v1 == v) (G.edges g)
 
--- so, this occasionally produces the right answer, but more often I
--- get "thread blocked indefinitely in an MVar operation"
-p :: G.Graph -> Int -> Par QuasiDet s (ISet Frzn Int)
-p g startNode = do
+traverse :: G.Graph -> Int -> Par QuasiDet s (ISet Frzn Int)
+traverse g startNode = do
   seen <- newEmptySet
-  hp <- newPool
-  insert startNode seen
-  addHandler (Just hp) seen
-    (\node -> do
-        mapM (\v -> insert v seen)
-          (neighbors g node)
-        return ())
-  quiesce hp
+  insert startNode seen -- Kick things off
+  h <- newHandler seen
+       (\node -> do
+           mapM (\v -> insert v seen)
+             (neighbors g node)
+           return ())
+  quiesce h
   freeze seen
 
+newHandler seen f = do
+  hp <- newPool
+  addHandler (Just hp) seen f
+  return hp
+
 main = do
-  v <- runParIO $ p myGraph (0 :: G.Vertex)
+  v <- runParIO $ traverse myGraph (0 :: G.Vertex)
   putStr $ show (fromISet v)

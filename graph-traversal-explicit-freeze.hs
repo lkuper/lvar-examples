@@ -2,7 +2,7 @@
 
 import Control.LVish
 import Control.LVish.DeepFrz
-import Data.LVar.Generic (addHandler)
+import Data.LVar.Generic (addHandler, freeze)
 import Data.LVar.PureSet
 import qualified Data.Graph as G
 import qualified Data.Set as S
@@ -34,18 +34,19 @@ neighbors g v =
 
 -- so, this occasionally produces the right answer, but more often I
 -- get "thread blocked indefinitely in an MVar operation"
-p :: G.Graph -> G.Vertex -> Par QuasiDet s (S.Set G.Vertex)
+p :: G.Graph -> Int -> Par QuasiDet s (ISet Frzn Int)
 p g startNode = do
   seen <- newEmptySet
   hp <- newPool
   insert startNode seen
   addHandler (Just hp) seen
     (\node -> do
-        mapM (\v -> insert v seen) (neighbors g node)
+        mapM (\v -> insert v seen)
+          (neighbors g node)
         return ())
   quiesce hp
-  freezeSet seen
+  freeze seen
 
 main = do
   v <- runParIO $ p myGraph (0 :: G.Vertex)
-  putStr $ show v
+  putStr $ show (fromISet v)

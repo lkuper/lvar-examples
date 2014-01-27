@@ -87,5 +87,9 @@ graph-traversal-explicit-freeze:
 	ghc -O2 graph-traversal-explicit-freeze.hs -rtsopts -threaded
 	while true; do ./graph-traversal-explicit-freeze +RTS -N2; done
 
+graph-traversal-implicit-freeze:
+	ghc -O2 graph-traversal-implicit-freeze.hs -rtsopts -threaded
+	while true; do ./graph-traversal-implicit-freeze +RTS -N2; done
+
 clean:
-	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi map-ioref-data-race map-synchronized map-lvar-waitsize map-lvar-getkey map-lvar-getkey-lib map-lvar-freezeafter map-lvar-quasi graph-traversal-explicit-freeze
+	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi map-ioref-data-race map-synchronized map-lvar-waitsize map-lvar-getkey map-lvar-getkey-lib map-lvar-freezeafter map-lvar-quasi graph-traversal-explicit-freeze graph-traversal-implicit-freeze

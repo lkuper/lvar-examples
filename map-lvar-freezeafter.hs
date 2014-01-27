@@ -4,7 +4,7 @@
 import Control.LVish
 import Control.LVish.DeepFrz
 import Data.LVar.PureMap
-import qualified Data.Map as M
+import Data.Map (toList)
 
 data Item = Book | Shoes
   deriving (Show, Ord, Eq)
@@ -20,4 +20,4 @@ p = do
   return cart
 
 main = do
-  putStr $ show $ M.toList $ fromIMap $ runParThenFreeze p
+  putStr $ show $ toList $ fromIMap $ runParThenFreeze p

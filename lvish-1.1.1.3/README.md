@@ -163,6 +163,12 @@ possible to threshold on the key and get back the value.
   * `map-lvar-freezeafter.hs`
 
   * `map-lvar-quasi.hs`
+  
+### Graph traversal examples
+
+  * `graph-traversal-explicit-freeze.hs`
+  
+  * `graph-traversal-implicit-freeze.hs`
 
 ## Caveats
 

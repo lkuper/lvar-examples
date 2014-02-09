@@ -1,64 +1,7 @@
-# Programming with LVars, by example
-
-_LVars_ are monotonically growing, lattice-based data structures for
-deterministic parallel programming.
-[LVish](http://hackage.haskell.org/package/lvish) is a Haskell library
-for programming with LVars.  This repository contains toy examples of
-programs that use LVars and LVish, as well as a few that _don't_ use
-LVars but are there for illustrative purposes.
-
-## Installing LVish
-
-You can install LVish
-[from Hackage](http://hackage.haskell.org/package/lvish) by running
-`cabal install lvish` (perhaps preceded by `cabal update`).  If you
-want the bleeding-edge version, you can get it from
-[here](https://github.com/iu-parfunc/lvars/tree/master/haskell/lvish)
-and then run `cabal install`:
-
-``` bash
-git clone git@github.com:iu-parfunc/lvars.git
-cd lvars/haskell/lvish/
-cabal install
-```
-
 These examples should all build and run against the newest, unreleased
 version of LVish.  (In particular, they use "effect levels" instead of
 the more coarse-grained "determinism levels".)
 
-## Running the examples
-
-The `Makefile` contains one target for each example program.  Each
-target builds and then runs a program, often in an infinite loop to
-illustrate the program's determinism or lack thereof.  For instance:
-
-``` bash
-$ make repeated-4-lvar
-ghc -O2 repeated-4-lvar.hs -rtsopts -threaded
-Linking repeated-4-lvar ...
-while true; do ./repeated-4-lvar +RTS -N2; done
-444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444^C
-```
-
-## What the examples do
-
-### Comparing LVars with IVars and MVars
-
-These five examples are documented in
-[a blog post](http://composition.al/blog/2013/09/22/some-example-mvar-ivar-and-lvar-programs-in-haskell/):
-
-  * `data-race-example.hs`: An example of what we _don't_ want.  Two
-    threads race to write different values to an `MVar`, resulting in
-    a program that might print either evalue.
-	
-  * `ivar-example.hs`: An example of what we _do_ want.  Two threads
-    race to write different values to an `IVar`, raising a `multiple
-    put` error.
-	
-  * `repeated-4-ivar.hs`: An example of the limitations of `IVar`s.
-    Two threads race to write the same value to an `IVar`, raising a
-    `multiple put` error.
-	
   * `repeated-4-lvar.hs`: Two threads race to write the same value to
      an `LVar`, resulting in a program that deterministically prints
      that one value.
@@ -66,29 +9,10 @@ These five examples are documented in
   * `repeated-write-lvar-wrong.hs`: Two threads race to write
      _conflicting_ values to an `LVar`, resulting in a program that
      deterministically raises an error.
-	 
-### Parallel logical "and"
-
-This example is documented in a blog post,
-["The LVar that wasn't"](http://composition.al/blog/2013/12/24/the-lvar-that-wasnt/).
   
   * `parallel-and.hs`: Two threads race to write to an `LVar` that
     stores the result of a parallel logical "and" operation.  But
     something is fishy...
-	
-### Shopping cart examples
-
-#### Sets
-
-  * **Nondeterministic**: `set-ioref-data-race.hs`. Two threads add
-    items to a shopping cart, represented as an `IORef` containing a
-    `Data.Set`, and a third thread reads the cart's contents, which
-    are nondeterministic because the program is undersynchronized.
-	
-  * **Deterministic with no by-construction guarantee**:
-    `set-synchronized.hs`. A revised version of the above program with
-    enough synchronization to be deterministic, but only because it
-    manually calls `wait` in the right places.
 	
   * **Deterministic with a quasi-determinism-by-construction
     guarantee**: `set-lvar-waitsize.hs`. A version of the shopping
@@ -137,15 +61,6 @@ This example is documented in a blog post,
     quasi-deterministic, but not deterministic, and so we have to run
     it with `runParIO`.
 	
-#### Maps
-
-Maps are more interesting than sets to threshold on because it's
-possible to threshold on the key and get back the value.
-
-  * `map-lvar-ioref-data-race.hs`
-  
-  * `map-lvar-synchronized.hs`
-  
   * `map-lvar-waitsize.hs`
 
   * `map-lvar-getkey.hs`: An experiment in implementing our own map
@@ -165,8 +80,8 @@ possible to threshold on the key and get back the value.
   * `map-lvar-freezeafter.hs`
 
   * `map-lvar-quasi.hs`
+  
+  * `graph-traversal-explicit-freeze.hs`
+  
+  * `graph-traversal-implicit-freeze.hs`
 
-## Caveats
-
-The usual caveats about research code apply: **Parts of it are broken.
-The API will change.  It will eat your laundry.**

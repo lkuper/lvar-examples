@@ -1,26 +1,4 @@
-# Programming with LVars, by example
-
-_LVars_ are monotonically growing, lattice-based data structures for
-deterministic parallel programming.
-[LVish](http://hackage.haskell.org/package/lvish) is a Haskell library
-for programming with LVars.  This repository contains toy examples of
-programs that use LVars and LVish, as well as a few that _don't_ use
-LVars but are there for illustrative purposes.
-
-## Installing LVish
-
-You can install LVish
-[from Hackage](http://hackage.haskell.org/package/lvish) by running
-`cabal install lvish` (perhaps preceded by `cabal update`).  If you
-want the bleeding-edge version, you can get it from
-[here](https://github.com/iu-parfunc/lvars/tree/master/haskell/lvish)
-and then run `cabal install`:
-
-``` bash
-git clone git@github.com:iu-parfunc/lvars.git
-cd lvars/haskell/lvish/
-cabal install
-```
+# lvish-2.0 examples
 
 These examples all build and run against **lvish-2.0**.  (In
 particular, they use "effect levels" instead of the more

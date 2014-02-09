@@ -1,0 +1,183 @@
+-- The name of the package.
+name:                lvar-examples-old
+
+-- The package version.  See the Haskell package versioning policy (PVP) 
+-- for standards guiding when and how versions should be incremented.
+-- http://www.haskell.org/haskellwiki/Package_versioning_policy
+-- PVP summary:      +-+------- breaking API changes
+--                   | | +----- non-breaking API additions
+--                   | | | +--- code changes with no API change
+version:             0.1.0.0
+
+-- A short (one-line) description of the package.
+synopsis:            Programming with LVars, by example.
+
+-- The package author(s).
+author:              Lindsey Kuper
+
+-- An email address to which users can send suggestions, bug reports, and 
+-- patches.
+maintainer:          lindsey@composition.al
+
+category:            Concurrency
+
+build-type:          Simple
+
+-- Extra files to be distributed with the package, such as examples or a 
+-- README.
+extra-source-files:  README.md
+
+-- Constraint on the version of Cabal needed to build this package.
+cabal-version:       >=1.10
+
+executable data-race-example
+  main-is:             data-race-example.hs
+  build-depends:       base >=4.6 && <4.7
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable ivar-example
+  main-is:             ivar-example.hs
+  build-depends:       base >=4.6 && <4.7
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable repeated-4-ivar
+  main-is:             repeated-4-ivar.hs
+  build-depends:       base >=4.6 && <4.7
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable repeated-4-lvar
+  main-is:             repeated-4-lvar.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+  
+executable repeated-write-lvar-wrong
+  main-is:             repeated-write-lvar-wrong.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable parallel-and
+  main-is:             parallel-and.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       lattices
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable set-ioref-data-race
+  main-is:             set-ioref-data-race.hs
+  build-depends:       base >=4.6 && <4.7
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable set-synchronized
+  main-is:             set-synchronized.hs
+  build-depends:       base >=4.6 && <4.7
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+  
+executable set-lvar-waitsize
+  main-is:             set-lvar-waitsize.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+  
+executable set-lvar-waitelem
+  main-is:             set-lvar-waitelem.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       lattices
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable set-lvar-freezeafter
+  main-is:             set-lvar-freezeafter.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+  
+executable set-lvar-quasi
+  main-is:             set-lvar-quasi.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable map-ioref-data-race
+  main-is:             map-ioref-data-race.hs
+  build-depends:       base >=4.6 && <4.7
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable map-synchronized
+  main-is:             map-synchronized.hs
+  build-depends:       base >=4.6 && <4.7
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+  
+executable map-lvar-waitsize
+  main-is:             map-lvar-waitsize.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable map-lvar-getkey
+  main-is:             map-lvar-getkey.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers,
+                       lattices
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable map-lvar-getkey-lib
+  main-is:             map-lvar-getkey-lib.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+  
+executable map-lvar-freezeafter
+  main-is:             map-lvar-freezeafter.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+  
+executable map-lvar-quasi
+  main-is:             map-lvar-quasi.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable graph-traversal-explicit-freeze
+  main-is:             graph-traversal-explicit-freeze.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable graph-traversal-implicit-freeze
+  main-is:             graph-traversal-implicit-freeze.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.1.3,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2

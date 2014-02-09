@@ -22,9 +22,7 @@ cd lvars/haskell/lvish/
 cabal install
 ```
 
-The released version of LVish lags behind the head of the tree, and
-some of the examples in this repository may not work against the
-released version.  Sorry.
+These examples should all build and run against [lvish-1.1.1.3](http://hackage.haskell.org/package/lvish-1.1.1.3).
 
 ## Running the examples
 
@@ -66,12 +64,6 @@ These five examples are documented in
   * `repeated-write-lvar-wrong.hs`: Two threads race to write
      _conflicting_ values to an `LVar`, resulting in a program that
      deterministically raises an error.
-	 
-### MaxCounter
-
-  * `repeated-write-lvar-max-counter.hs`: Two threads race to write
-     different integer values to an `LVar`.  Its contents
-     deterministically end up as the maximum of the two writes.
 	 
 ### Parallel logical "and"
 
@@ -171,13 +163,6 @@ possible to threshold on the key and get back the value.
   * `map-lvar-freezeafter.hs`
 
   * `map-lvar-quasi.hs`
-
-### Not working yet
-
-  * `pair-lvar.hs`: This one doesn't work, since LVish doesn't
-    currently expose the `Pair` data type.  (We could, however,
-    implement our own `Pair` using things that LVish provides if we
-    wanted to.)
 
 ## Caveats
 

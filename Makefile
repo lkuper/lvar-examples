@@ -19,14 +19,6 @@ repeated-write-lvar-wrong:
 	ghc -O2 repeated-write-lvar-wrong.hs -rtsopts -threaded
 	./repeated-write-lvar-wrong +RTS -N2
 
-repeated-write-lvar-max-counter:
-	ghc -O2 repeated-write-lvar-max-counter.hs -rtsopts -threaded
-	while true; do ./repeated-write-lvar-max-counter +RTS -N2; done
-
-pair-lvar:
-	ghc -O2 pair-lvar-example.hs -rtsopts -threaded
-	while true; do ./pair-lvar +RTS -N2; done
-
 parallel-and:
 	ghc -O2 parallel-and.hs -rtsopts -threaded
 	while true; do ./parallel-and +RTS -N2; done
@@ -92,4 +84,4 @@ graph-traversal-implicit-freeze:
 	while true; do ./graph-traversal-implicit-freeze +RTS -N2; done
 
 clean:
-	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong repeated-write-lvar-max-counter pair-lvar-example parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi map-ioref-data-race map-synchronized map-lvar-waitsize map-lvar-getkey map-lvar-getkey-lib map-lvar-freezeafter map-lvar-quasi graph-traversal-explicit-freeze graph-traversal-implicit-freeze
+	rm -f *.hi *.o data-race-example ivar-example repeated-4-ivar repeated-4-lvar repeated-write-lvar-wrong parallel-and set-ioref-data-race set-synchronized set-lvar-waitsize set-lvar-freezeafter set-lvar-quasi map-ioref-data-race map-synchronized map-lvar-waitsize map-lvar-getkey map-lvar-getkey-lib map-lvar-freezeafter map-lvar-quasi graph-traversal-explicit-freeze graph-traversal-implicit-freeze

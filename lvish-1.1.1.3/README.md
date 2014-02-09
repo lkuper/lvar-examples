@@ -140,9 +140,9 @@ This example is documented in a blog post,
 Maps are more interesting than sets to threshold on because it's
 possible to threshold on the key and get back the value.
 
-  * `map-lvar-ioref-data-race.hs`
+  * `map-ioref-data-race.hs`
   
-  * `map-lvar-synchronized.hs`
+  * `map-synchronized.hs`
   
   * `map-lvar-waitsize.hs`
 

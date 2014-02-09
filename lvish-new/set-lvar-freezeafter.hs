@@ -12,7 +12,7 @@ data Item = Book | Shoes
 instance DeepFrz Item where
   type FrzType Item = Item
 
-p :: Par Det s (ISet s Item)
+p :: (HasPut e, HasGet e) => Par e s (ISet s Item)
 p = do
   cart <- newEmptySet
   fork $ insert Book cart

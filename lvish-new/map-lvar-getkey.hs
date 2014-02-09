@@ -16,7 +16,6 @@
 
 import Algebra.Lattice
 import Control.Concurrent (threadDelay)
-import Control.Concurrent.Async
 import Control.LVish
 import Control.LVish.Internal (liftIO)
 import Data.LVar.Internal.Pure
@@ -37,7 +36,7 @@ data CartState = Bot
 data Count = One | Two | Three | Four | Five
   deriving (Show, Ord, Eq, Enum)
 
-countTranslation = [(One, 1), (Two, 2), (Three, 3), (Four, 4), (Five, 5)]
+countTranslation = [(One, 1 :: Int), (Two, 2 :: Int), (Three, 3 :: Int), (Four, 4 :: Int), (Five, 5 :: Int)]
 
 instance JoinSemiLattice CartState
          where join = joinCartStates
@@ -60,7 +59,7 @@ joinCartStates (Shoes y1) (BookShoes x2 y2) =
 joinCartStates x y = joinCartStates y x
 
 -- A wrapper for putPureLVar.
-putItem :: PureLVar s CartState -> (Count -> CartState) -> Int -> Par d s ()
+putItem :: HasPut e => PureLVar s CartState -> (Count -> CartState) -> Int -> Par e s ()
 putItem cart item count = putPureLVar cart (item x) where
   x = case M.lookup count $ M.fromList $ map swap countTranslation of
     Nothing -> undefined
@@ -68,7 +67,7 @@ putItem cart item count = putPureLVar cart (item x) where
 
 -- A wrapper for getPureLVar.  Expects its first argument to be either
 -- `Book` or `Shoes`.
-getItemCount :: (Count -> CartState) -> PureLVar s CartState -> Par Det s Int
+getItemCount :: HasGet e => (Count -> CartState) -> PureLVar s CartState -> Par e s Int
 getItemCount item cart = do
   state <- getPureLVar cart [item x | x <- [One .. Five]]
   -- This is silly -- I wish I could match against multiple
@@ -81,7 +80,7 @@ getItemCount item cart = do
                Nothing -> undefined
                Just n -> n)
 
-p :: Par Det s Int
+p :: (HasPut e, HasGet e) => Par e s Int
 p = do
   cart <- newPureLVar Bot
   fork $ do --liftIO $ threadDelay 10000;

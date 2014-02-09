@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeFamilies #-}
 
 import Control.LVish
 import Control.LVish.DeepFrz
@@ -10,7 +11,7 @@ data Item = Book | Shoes
 
 -- Returns an ordinary Data.Set, because `freezeSet` turns a
 -- `Data.LVar.PureSet` into one.
-p :: Par QuasiDet s (S.Set Item)
+p :: (HasPut e, HasGet e, HasFreeze e) => Par e s (S.Set Item)
 p = do
   cart <- newEmptySet
   fork $ insert Book cart
@@ -19,5 +20,5 @@ p = do
   freezeSet cart
 
 main = do
-  v <- runParIO p
+  v <- runParQuasiDet p
   putStr $ show $ S.toList v

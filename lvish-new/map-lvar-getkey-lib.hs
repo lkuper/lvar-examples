@@ -1,13 +1,13 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeFamilies #-}
 
 import Control.LVish
-import Control.LVish.DeepFrz
 import Data.LVar.PureMap
 
 data Item = Book | Shoes
   deriving (Show, Ord, Eq)
 
-p :: Par Det s Int
+p :: (HasPut e, HasGet e) => Par e s Int
 p = do
   cart <- newEmptyMap
   fork $ insert Book 2 cart

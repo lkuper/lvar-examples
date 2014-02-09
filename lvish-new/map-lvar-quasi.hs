@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeFamilies #-}
 
 import Control.Concurrent (threadDelay)
 import Control.LVish
@@ -10,7 +11,7 @@ import qualified Data.Map as M
 data Item = Book | Shoes
   deriving (Show, Ord, Eq)
 
-p :: Par QuasiDet s (M.Map Item Int)
+p :: (HasPut e, HasGet e, HasFreeze e) => Par e s (M.Map Item Int)
 p = do
   cart <- newEmptyMap
   fork $ insert Book 1 cart
@@ -21,5 +22,5 @@ p = do
   freezeMap cart
 
 main = do
-  v <- runParIO p
+  v <- runParQuasiDet p
   putStr $ show $ M.toList v

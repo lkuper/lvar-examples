@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeFamilies #-}
 
 import Control.LVish
 import Control.LVish.DeepFrz
@@ -32,7 +33,7 @@ neighbors g v =
   map snd edgesFromNode where
     edgesFromNode = filter (\(v1, _) -> v1 == v) (G.edges g)
 
-traverse :: G.Graph -> Int -> Par QuasiDet s (ISet Frzn Int)
+traverse :: (HasPut e, HasGet e, HasFreeze e) => G.Graph -> Int -> Par e s (ISet Frzn Int)
 traverse g startNode = do
   seen <- newEmptySet
   h <- newHandler seen
@@ -50,5 +51,5 @@ newHandler seen f = do
   return hp
 
 main = do
-  v <- runParIO $ traverse myGraph (0 :: G.Vertex)
+  v <- runParQuasiDet $ traverse myGraph (0 :: G.Vertex)
   putStr $ show (fromISet v)

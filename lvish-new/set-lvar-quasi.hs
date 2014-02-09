@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeFamilies #-}
 
 -- Here's an undersynchronized, quasi-deterministic program that
 -- either returns [Book, Shoes] or raises an error.
@@ -13,7 +14,7 @@ import qualified Data.Set as S
 data Item = Book | Shoes
   deriving (Show, Ord, Eq)
 
-p :: Par QuasiDet s (S.Set Item)
+p :: (HasPut e, HasGet e, HasFreeze e) => Par e s (S.Set Item)
 p = do
   cart <- newEmptySet
   fork $ insert Book cart
@@ -24,5 +25,5 @@ p = do
   freezeSet cart
 
 main = do
-  v <- runParIO p
+  v <- runParQuasiDet p
   putStr $ show $ S.toList v

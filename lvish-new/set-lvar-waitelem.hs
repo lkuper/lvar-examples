@@ -16,7 +16,6 @@
 
 import Algebra.Lattice
 import Control.Concurrent (threadDelay)
-import Control.Concurrent.Async
 import Control.LVish
 import Control.LVish.Internal (liftIO)
 import Data.LVar.Internal.Pure
@@ -38,7 +37,7 @@ joinCartStates Book Both = Both
 joinCartStates Shoes Both = Both
 joinCartStates x y = joinCartStates y x
 
-p :: Par Det s CartState
+p :: (HasPut e, HasGet e) => Par e s CartState
 p = do
   cart <- newPureLVar Bot
   fork $ do --liftIO $ threadDelay 10000;

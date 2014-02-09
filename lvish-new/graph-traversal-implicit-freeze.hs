@@ -33,7 +33,7 @@ neighbors g v =
   map snd edgesFromNode where
     edgesFromNode = filter (\(v1, _) -> v1 == v) (G.edges g)
 
-traverse :: G.Graph -> Int -> Par Det s (ISet s Int)
+traverse :: HasPut e => G.Graph -> Int -> Par e s (ISet s Int)
 traverse g startNode = do
   seen <- newEmptySet
   h <- newHandler seen

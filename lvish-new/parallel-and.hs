@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeFamilies #-}
+
 {-
 
 This example differs from most of those in this repo because we're
@@ -42,7 +44,7 @@ import Algebra.Lattice
 -- parameter, for session sealing, and the value it's storing, which
 -- is in this case one of six variants.
 type Result s = PureLVar s State
-data State = Bot | TrueBot | BotTrue | TrueTrue | F | Top
+data State = Bot | TrueBot | BotTrue | TrueTrue | Fls | Top
            deriving (Eq, Ord, Show, Enum)
 
 -- Library functions like `getPureLVar` and `putPureLVar` are defined
@@ -62,21 +64,6 @@ instance JoinSemiLattice State where
 instance BoundedJoinSemiLattice State where
   bottom = Bot
 
-
-myLeq :: State -> State -> Bool
-myLeq x y | x == y = True
-myLeq Bot _ = True
-myLeq _ Top = True
-
-myLeq TrueBot TrueTrue = True
-myLeq TrueBot F = True
-
-myLeq BotTrue TrueTrue = True
-myLeq BotTrue F = True
-
-myLeq _ _ = False
-
-
 -- The joinStates function computes the least upper bound of its
 -- arguments.
 joinStates :: State -> State -> State
@@ -90,37 +77,37 @@ joinStates Bot x = x
 joinStates Top _ = Top
 joinStates _ Top = Top
 
--- Interesting cases involving `TrueTrue` or `F`.
+-- Interesting cases involving `TrueTrue` or `Fls`.
 joinStates TrueBot BotTrue = TrueTrue
 joinStates TrueTrue TrueBot = TrueTrue
 joinStates TrueTrue BotTrue = TrueTrue
-joinStates F TrueTrue = Top
-joinStates F _  = F
+joinStates Fls TrueTrue = Top
+joinStates Fls _  = Fls
 
 -- Join is commutative.
 joinStates x y = joinStates y x
 
 -- Now we're finally ready to define what the API to a `Result` will
 -- be.  We should only be able to look at a `Result` when it's in one
--- of the two "exactly enough information" states: `TrueTrue` or `F`.
+-- of the two "exactly enough information" states: `TrueTrue` or `Fls`.
 -- The definition of the `getResult` operation, which is written in terms of
 -- the library function `getPureLVar` expresses this.  (In fact,
 -- `getPureLVar` is one of the few places in LVish where "threshold
--- sets" appear explicitly: [TrueTrue, F] is a threshold set.)
-getResult :: Result s -> Par d s State
-getResult avr = getPureLVar avr [TrueTrue, F]
+-- sets" appear explicitly: [TrueTrue, Fls] is a threshold set.)
+getResult :: HasGet e => Result s -> Par e s State
+getResult avr = getPureLVar avr [TrueTrue, Fls]
 
 -- Now we can define an `asyncAnd` operation, which is the only way to
 -- write to a `Result`.  It takes two values of type `Bool` (each
 -- wrapped in a Par computation), creates a new LVar, launches two
 -- threads that each write a `State` into the shared LVar, and finally
 -- gets and returns the result.  If the result is neither `TrueTrue`
--- nor `F`, the `getResult` call will block.
-asyncAnd :: Par d s Bool -> Par d s Bool -> Par d s Bool 
+-- nor `Fls`, the `getResult` call will block.
+asyncAnd :: (HasPut e, HasGet e)  => Par e s Bool -> Par e s Bool -> Par e s Bool 
 asyncAnd m1 m2 = do
   res <- newPureLVar Bot
-  fork $ do b1 <- m1; putPureLVar res (if b1 then TrueBot else F)
-  fork $ do b2 <- m2; putPureLVar res (if b2 then BotTrue else F)
+  fork $ do b1 <- m1; putPureLVar res (if b1 then TrueBot else Fls)
+  fork $ do b2 <- m2; putPureLVar res (if b2 then BotTrue else Fls)
   x <- getResult res
   return (x == TrueTrue)
 
@@ -157,37 +144,37 @@ printAllJoins = do
 "join Bot TrueBot = TrueBot"
 "join Bot BotTrue = BotTrue"
 "join Bot TrueTrue = TrueTrue"
-"join Bot F = F"
+"join Bot Fls = Fls"
 "join Bot Top = Top"
 "join TrueBot Bot = TrueBot"
 "join TrueBot TrueBot = TrueBot"
 "join TrueBot BotTrue = TrueTrue"
 "join TrueBot TrueTrue = TrueTrue"
-"join TrueBot F = F"
+"join TrueBot Fls = Fls"
 "join TrueBot Top = Top"
 "join BotTrue Bot = BotTrue"
 "join BotTrue TrueBot = TrueTrue"
 "join BotTrue BotTrue = BotTrue"
 "join BotTrue TrueTrue = TrueTrue"
-"join BotTrue F = F"
+"join BotTrue Fls = Fls"
 "join BotTrue Top = Top"
 "join TrueTrue Bot = TrueTrue"
 "join TrueTrue TrueBot = TrueTrue"
 "join TrueTrue BotTrue = TrueTrue"
 "join TrueTrue TrueTrue = TrueTrue"
-"join TrueTrue F = Top"
+"join TrueTrue Fls = Top"
 "join TrueTrue Top = Top"
-"join F Bot = F"
-"join F TrueBot = F"
-"join F BotTrue = F"
-"join F TrueTrue = Top"
-"join F F = F"
-"join F Top = Top"
+"join Fls Bot = Fls"
+"join Fls TrueBot = Fls"
+"join Fls BotTrue = Fls"
+"join Fls TrueTrue = Top"
+"join Fls Fls = Fls"
+"join Fls Top = Top"
 "join Top Bot = Top"
 "join Top TrueBot = Top"
 "join Top BotTrue = Top"
 "join Top TrueTrue = Top"
-"join Top F = Top"
+"join Top Fls = Top"
 "join Top Top = Top"
 
 -}
@@ -201,12 +188,12 @@ For associativity to hold, it has to be the case that
 However, according to the above definition of `join`, this is not the
 case, because:
 
-  TrueBot `join` (BotTrue `join` F) =
-  TrueBot `join` F =
-  F
+  TrueBot `join` (BotTrue `join` Fls) =
+  TrueBot `join` Fls =
+  Fls
 
-  (TrueBot `join` BotTrue) `join` F =
-  TrueTrue `join` F =
+  (TrueBot `join` BotTrue) `join` Fls =
+  TrueTrue `join` Fls =
   Top
 
 So our join-semilattice is not really a join-semilattice!
@@ -235,11 +222,11 @@ would suffice for the following two properties to hold:
   * For all elements v1 and v2 of S,
     v1 <= (v1 `join` v2) and v2 <= (v1 `join` v2).
 
-For us, the first of these does not hold! TrueBot <= F and BotTrue <=
-F, but (TrueBot `join` BotTrue) == TrueTrue, which is not <= F.
+For us, the first of these does not hold! TrueBot <= Fls and BotTrue <=
+Fls, but (TrueBot `join` BotTrue) == TrueTrue, which is not <= Fls.
 
-Another way to put it: since `TrueTrue` and `F` are both upper bounds
-of {`TrueBot`, `BotTrue`}, and neither `TrueTrue` nor `F` is less than
+Another way to put it: since `TrueTrue` and `Fls` are both upper bounds
+of {`TrueBot`, `BotTrue`}, and neither `TrueTrue` nor `Fls` is less than
 the other, then {`TrueBot`, `BotTrue`} doesn't actually have a lub,
 regardless of what the definition of `join` claims it is.
 

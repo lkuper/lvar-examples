@@ -22,7 +22,9 @@ cd lvars/haskell/lvish/
 cabal install
 ```
 
-These examples should all build and run against [lvish-1.1.1.3](http://hackage.haskell.org/package/lvish-1.1.1.3).
+These examples should all build and run against the newest, unreleased
+version of LVish.  (In particular, they use "effect levels" instead of
+the more coarse-grained "determinism levels".)
 
 ## Running the examples
 

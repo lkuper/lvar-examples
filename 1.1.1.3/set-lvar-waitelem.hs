@@ -16,7 +16,6 @@
 
 import Algebra.Lattice
 import Control.Concurrent (threadDelay)
-import Control.Concurrent.Async
 import Control.LVish
 import Control.LVish.Internal (liftIO)
 import Data.LVar.Internal.Pure

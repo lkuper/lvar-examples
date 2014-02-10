@@ -22,9 +22,9 @@ cd lvars/haskell/lvish/
 cabal install
 ```
 
-Then, depending on whether you have **lvish-1.1.1.3** or **lvish-2.0**
+Then, depending on whether you have **lvish-1.1.2** or **lvish-2.0**
 installed, go
-[here](https://github.com/lkuper/lvar-examples/tree/master/1.1.1.3) or
+[here](https://github.com/lkuper/lvar-examples/tree/master/1.1.2) or
 [here](https://github.com/lkuper/lvar-examples/tree/master/2.0).
 Enjoy!
 

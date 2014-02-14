@@ -33,7 +33,7 @@ $ while true; do ./dist/build/repeated-4-lvar/repeated-4-lvar; done
 
 Coming soon!
 
-## Examples ported from lvish-1.1.1.3
+## Examples ported from lvish-1.1.2
 
 ### Basic examples
 

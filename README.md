@@ -1,5 +1,7 @@
 # Programming with LVars, by example
 
+[![Build Status](https://travis-ci.org/lkuper/lvar-examples.png?branch=master)](https://travis-ci.org/lkuper/lvar-examples)
+
 _LVars_ are monotonically growing, lattice-based data structures for
 deterministic parallel programming.
 [LVish](http://hackage.haskell.org/package/lvish) is a Haskell library

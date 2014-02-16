@@ -1,0 +1,4 @@
+language: haskell
+ghc: 7.6.3
+before_install:
+  - "cd 1.1.2"

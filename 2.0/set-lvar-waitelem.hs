@@ -46,5 +46,4 @@ p = do
             putPureLVar cart Shoes
   getPureLVar cart [Both]
 
-main = do
-  print $ runPar p
+main = print $ runPar p

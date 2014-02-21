@@ -13,5 +13,4 @@ p = do
   fork (put num 4)
   get num
 
-main = do
-  print $ runPar p
+main = print $ runPar p

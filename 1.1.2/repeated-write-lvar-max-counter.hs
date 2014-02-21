@@ -17,5 +17,4 @@ p = do
   fork (put num 4)
   waitThresh num 4
 
-main = do
-  print $ runPar p
+main = print $ runPar p

@@ -94,5 +94,4 @@ p = do
   -- but we won't be able to distinguish those situations).
   getItemCount Book cart
 
-main = do
-  print $ runPar p
+main = print $ runPar p

@@ -14,5 +14,4 @@ p = do
   fork $ insert Shoes 1 cart
   getKey Book cart
 
-main = do
-  print $ runPar p
+main = print $ runPar p

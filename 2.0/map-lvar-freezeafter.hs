@@ -20,5 +20,4 @@ p = do
   fork $ insert Shoes 1 cart
   return cart
 
-main = do
-  print $ runParThenFreeze p
+main = print $ runParThenFreeze p

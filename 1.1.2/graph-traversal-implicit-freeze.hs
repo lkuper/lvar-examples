@@ -48,6 +48,5 @@ newHandler seen f = do
   addHandler (Just hp) seen f
   return hp
 
-main = do
-  print $ runParThenFreeze $ traverse myGraph (0 :: G.Vertex)
+main = print $ runParThenFreeze $ traverse myGraph (0 :: G.Vertex)
 

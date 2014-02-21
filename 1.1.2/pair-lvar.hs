@@ -12,5 +12,4 @@ p = do
   fork (putSnd nn 1)
   getSnd nn
 
-main = do
-  print $ runPar p
+main = print $ runPar p

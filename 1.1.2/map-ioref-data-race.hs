@@ -13,4 +13,4 @@ p = do cart <- newIORef empty
        wait res
 
 main = do v <- p
-          putStr $ show $ toList v
+          print v

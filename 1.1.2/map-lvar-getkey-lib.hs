@@ -15,4 +15,4 @@ p = do
   getKey Book cart
 
 main = do
-  putStr $ show $ runPar p
+  print $ runPar p

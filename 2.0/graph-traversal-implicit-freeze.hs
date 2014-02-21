@@ -6,7 +6,6 @@ import Control.LVish.DeepFrz
 import Data.LVar.Generic (addHandler, freeze)
 import Data.LVar.PureSet
 import qualified Data.Graph as G
-import qualified Data.Set as S
 
 -- A toy graph for demonstration purposes.
 myGraph = first $ G.graphFromEdges [("node0", 0, [1, 6, 7]),
@@ -50,5 +49,5 @@ newHandler seen f = do
   return hp
 
 main = do
-  putStr $ show $ S.toList $ fromISet $ runParThenFreeze $ traverse myGraph (0 :: G.Vertex)
+  print $ runParThenFreeze $ traverse myGraph (0 :: G.Vertex)
 

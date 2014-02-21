@@ -12,4 +12,4 @@ p = do
   get num
 
 main = do
-  putStr $ show $ runPar $ p
+  print $ runPar p

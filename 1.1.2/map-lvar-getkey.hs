@@ -20,7 +20,7 @@ import Control.LVish
 import Control.LVish.Internal (liftIO)
 import Data.LVar.Internal.Pure
 import Data.Map as M (lookup, fromList)
-import Data.Tuple
+import Data.Tuple (swap)
 
 -- To keep it finite, we're assuming that five is the most you can get
 -- of any item.  Bot is like a quantity of zero for everything.  This
@@ -95,4 +95,4 @@ p = do
   getItemCount Book cart
 
 main = do
-  putStr $ show $ runPar p
+  print $ runPar p

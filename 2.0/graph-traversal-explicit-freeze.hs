@@ -6,7 +6,6 @@ import Control.LVish.DeepFrz
 import Data.LVar.Generic (addHandler, freeze)
 import Data.LVar.PureSet
 import qualified Data.Graph as G
-import qualified Data.Set as S
 
 -- A toy graph for demonstration purposes.
 myGraph = first $ G.graphFromEdges [("node0", 0, [1, 6, 7]),
@@ -52,4 +51,4 @@ newHandler seen f = do
 
 main = do
   v <- runParQuasiDet $ traverse myGraph (0 :: G.Vertex)
-  putStr $ show (fromISet v)
+  print $ fromISet v

@@ -25,4 +25,4 @@ p = do
 
 main = do
   v <- runParIO p
-  putStr $ show $ S.toList v
+  print v

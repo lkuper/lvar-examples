@@ -115,22 +115,22 @@ asyncAnd m1 m2 = do
 -- which should return False.
 main = do
  -- True and False result in False, of course.
- putStrLn $ show $ runPar $ 
+ print $ runPar $ 
    asyncAnd (return True) (return False)
 
  -- Folding asyncAnd over a big list of alternating Trues and Falses.
- putStrLn $ show $ runPar $ 
+ print $ runPar $ 
    foldr asyncAnd (return True) (concat $ replicate 100 [return True, return False])
 
  -- Here's a list of lots of Trues with a stray False in the middle.
- putStrLn $ show $ runPar $ 
+ print $ runPar $ 
    foldr asyncAnd (return True) (concat [replicate 100 (return True), [return False], replicate 100 (return True)])
 
 -- Just for the sake of convincing ourselves that `joinStates` is
 -- defined correctly, here's a function to print the result of calling
 -- it for all 36 combinations of states.
 printAllJoins = do
-  putStrLn $ showStrings
+  print $ showStrings
     ["join " ++ show x ++ " " ++ show y ++ " = " ++ show (joinStates x y)
     | x <- [Bot .. Top],
       y <- [Bot .. Top]]
@@ -235,7 +235,7 @@ regardless of what the definition of `join` claims it is.
 -- Here's some code to help check the first of the above two
 -- properties.
 testJoin = do
-  putStrLn $ showStrings
+  print $ showStrings
     [show [v1, v2, v] ++ ": " ++
      show (if (v1 `joinLeq` v && v2 `joinLeq` v)
            then (v1 `join` v2) `joinLeq` v

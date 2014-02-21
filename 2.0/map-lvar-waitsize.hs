@@ -24,4 +24,4 @@ p = do
 
 main = do
   v <- runParQuasiDet p
-  putStr $ show $ M.toList v
+  print $ M.toList v

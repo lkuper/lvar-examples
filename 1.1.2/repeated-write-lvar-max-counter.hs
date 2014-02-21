@@ -18,4 +18,4 @@ p = do
   waitThresh num 4
 
 main = do
-  putStr $ show $ runPar p
+  print $ runPar p

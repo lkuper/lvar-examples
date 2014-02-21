@@ -13,4 +13,4 @@ p = do
   getSnd nn
 
 main = do
-  putStr $ show $ runPar $ p
+  print $ runPar p

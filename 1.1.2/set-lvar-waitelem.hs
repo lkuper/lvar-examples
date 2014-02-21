@@ -47,4 +47,4 @@ p = do
   getPureLVar cart [Both]
 
 main = do
-  putStr $ show $ runPar p
+  print $ runPar p

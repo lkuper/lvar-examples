@@ -4,7 +4,6 @@
 import Control.LVish
 import Control.LVish.DeepFrz
 import Data.LVar.PureSet
-import qualified Data.Set as S
 
 data Item = Book | Shoes
   deriving (Show, Ord, Eq)
@@ -20,4 +19,4 @@ p = do
   return cart
 
 main = do
-  putStr $ show $ S.toList $ fromISet $ runParThenFreeze p
+  print $ runParThenFreeze p

@@ -166,17 +166,17 @@ main = do
   --printAllJoins
   --testJoin
 
-  -- print $ runPar $ 
-  --   foldr asyncAnd (return True) (concat $ replicate 10 [return True, return False])
+  print $ runPar $ foldr asyncAnd (return True) (concat $ replicate 10 [return True, return False])
 
-  -- -- Folding asyncAnd over a big list of alternating Trues and Falses.
-  -- print $ runPar $ 
-  --   foldr asyncAnd (return True) (concat $ replicate 100 [return True, return False])
+  -- Folding asyncAnd over a big list of alternating Trues and Falses.
+  print $ runPar $ 
+    foldr asyncAnd (return True) (concat $ replicate 100 [return True, return False])
 
-  -- -- Here's a list of lots of Trues with a stray False in the middle.
-  -- print $ runPar $ 
-  --   foldr asyncAnd (return True) (concat [replicate 100 (return True), [return False], replicate 100 (return True)])
+  -- Here's a list of lots of Trues with a stray False in the middle.
+  print $ runPar $ 
+    foldr asyncAnd (return True) (concat [replicate 100 (return True), [return False], replicate 100 (return True)])
 
+printAllJoins :: IO ()
 printAllJoins = do
   print $ showStrings
     ["join " ++ show x ++ " " ++ show y ++ " = " ++ show (joinStates x y)
@@ -186,6 +186,7 @@ printAllJoins = do
           [] -> ""
           (x : xs) -> show x ++ "\n" ++ showStrings xs
 
+testJoin :: IO ()
 testJoin = do
   print $ showStrings
     [show [v1, v2, v] ++ ": " ++

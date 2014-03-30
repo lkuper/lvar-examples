@@ -33,8 +33,7 @@ import Debug.Trace
 -- result of a parallel logical "and" operation.
 
 -- The PureLVar type constructor takes two arguments: the `s` type
--- parameter, for session sealing, and the value it's storing, which
--- is in this case one of six variants.
+-- parameter, for session sealing, and the value it's storing.
 type Result s = PureLVar s State
 
 data State = Bot

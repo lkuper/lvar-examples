@@ -26,6 +26,8 @@ import Data.LVar.Internal.Pure (PureLVar, newPureLVar, putPureLVar,
 
 -- We'll need this later.
 import Algebra.Lattice
+import Debug.Trace
+--------------------------------------------------------------------------------
 
 -- OK, we're ready to define the `Result` type: the type of the
 -- result of a parallel logical "and" operation.
@@ -39,7 +41,7 @@ data State = Bot
            | TrueBot | BotTrue | FalseBot | BotFalse
            | TrueTrue | FalseTrue | TrueFalse | FalseFalse
            | Top
-           deriving (Eq, Ord, Show, Enum)
+           deriving (Eq, Ord, Show, Enum, Bounded)
 
 -- Library functions like `getPureLVar` and `putPureLVar` are defined
 -- in terms of a `join` function on states of PureLVars, and they
@@ -99,10 +101,21 @@ joinStates TrueTrue FalseFalse = Top
 joinStates FalseTrue TrueFalse = Top
 joinStates FalseTrue FalseFalse = Top
 
+joinStates FalseTrue TrueBot    = Top
+joinStates FalseTrue BotFalse   = Top
 joinStates TrueFalse FalseFalse = Top
+joinStates TrueFalse BotTrue    = Top
+
+joinStates FalseFalse TrueBot = Top
+joinStates FalseFalse BotTrue = Top
+
+joinStates TrueTrue   FalseBot = Top
+joinStates TrueTrue   BotFalse = Top
+joinStates TrueFalse  FalseBot = Top
 
 -- Join is commutative.
 joinStates x y = joinStates y x
+
 
 -- We should only be able to look at a `Result` when it's in one of
 -- the "exactly enough information" states.
@@ -118,32 +131,38 @@ getResult avr = do
 asyncAnd :: Par d s Bool -> Par d s Bool -> Par d s Bool 
 asyncAnd m1 m2 = do
   res <- newPureLVar Bot
-  fork $ do b1 <- m1; putPureLVar res (if b1 then TrueBot else FalseBot); liftIO $ print b1
-  fork $ do b2 <- m2; putPureLVar res (if b2 then BotTrue else BotFalse); liftIO $ print b2
-  liftIO $ print "---"
+  fork $ do b1 <- m1
+            putPureLVar res (if b1 then TrueBot else FalseBot)
+--            liftIO $ putStrLn $ " [dbg], got left: " ++ show b1
+  fork $ do b2 <- m2
+            putPureLVar res (if b2 then BotTrue else BotFalse)
+--            liftIO $ putStrLn $ " [dbg], got right: " ++ show b2
+--  liftIO $ print "---"
   x <- getResult res
-  return (x == TrueTrue)
+  return $! x == TrueTrue
 
 -- The main function just runs a bunch of calls to asyncAnd, all of
 -- which should return False.
+main :: IO ()
 main = do
-  -- True and False result in False, of course.
-  print $ runPar $ 
-    asyncAnd (return True) (return False)
-
+  putStrLn "First, a basic truth table:"
   -- These all work, as well.
-  print $ runPar $ 
-    asyncAnd (return True) (return True)
+  putStr "  asyncAnd TT: "
+  print $ runPar $ asyncAnd (return True) (return True)
 
-  print $ runPar $ 
-    asyncAnd (return False) (return True)
+  -- True and False result in False, of course.
+  putStr "  asyncAnd TF: "
+  print $ runPar $ asyncAnd (return True) (return False)
 
-  print $ runPar $ 
-    asyncAnd (return False) (return False)
+  putStr "  asyncAnd FT: "
+  print $ runPar $ asyncAnd (return False) (return True)
+
+  putStr "  asyncAnd FF: "
+  print $ runPar $ asyncAnd (return False) (return False)
 
   -- These all either don't work or are really slow. :(
 
-  --print $ verifyFiniteJoin [Bot .. Top] joinStates
+  putStrLn $ "Verify join lattice, should return Nothing: " ++ show (verifyFiniteJoin [Bot .. Top] joinStates)
   --printAllJoins
   --testJoin
 

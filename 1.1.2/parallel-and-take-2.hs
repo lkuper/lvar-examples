@@ -120,8 +120,8 @@ joinStates x y = joinStates y x
 -- We should only be able to look at a `Result` when it's in one of
 -- the "exactly enough information" states.
 getResult :: Result s -> Par d s State
-getResult avr = do
-  getPureLVar avr [TrueTrue, FalseTrue, TrueFalse, FalseFalse]
+getResult res = do
+  getPureLVar res [TrueTrue, FalseTrue, TrueFalse, FalseFalse]
 
 -- Now we can define an `asyncAnd` operation, which is the only way to
 -- write to a `Result`.  It takes two values of type `Bool` (each
@@ -132,17 +132,17 @@ asyncAnd :: Par d s Bool -> Par d s Bool -> Par d s Bool
 asyncAnd m1 m2 = do
   res <- newPureLVar Bot
   fork $ do b1 <- m1
-            putPureLVar res (if b1 then TrueBot else FalseBot)
+            putPureLVar res
+              (if b1 then TrueBot else FalseBot)
 --            liftIO $ putStrLn $ " [dbg], got left: " ++ show b1
   fork $ do b2 <- m2
-            putPureLVar res (if b2 then BotTrue else BotFalse)
+            putPureLVar res
+              (if b2 then BotTrue else BotFalse)
 --            liftIO $ putStrLn $ " [dbg], got right: " ++ show b2
---  liftIO $ print "---"
   x <- getResult res
   return $! x == TrueTrue
 
--- The main function just runs a bunch of calls to asyncAnd, all of
--- which should return False.
+-- The main function just runs a bunch of calls to asyncAnd.
 main :: IO ()
 main = do
   putStrLn "First, a basic truth table:"
@@ -160,21 +160,26 @@ main = do
   putStr "  asyncAnd FF: "
   print $ runPar $ asyncAnd (return False) (return False)
 
-  -- These all either don't work or are really slow. :(
+  -- Just testing...
+  -- putStrLn $ "Verify join lattice, should return Nothing: " ++ show (verifyFiniteJoin [Bot .. Top] joinStates)
+  -- printAllJoins
+  -- testJoin
 
-  putStrLn $ "Verify join lattice, should return Nothing: " ++ show (verifyFiniteJoin [Bot .. Top] joinStates)
-  --printAllJoins
-  --testJoin
+  -- Folding asyncAnd over a smallish list of alternating Trues and Falses.
+  print $ runPar $
+    foldr asyncAnd (return True)
+    (concat $ replicate 10 [return True, return False])
 
-  print $ runPar $ foldr asyncAnd (return True) (concat $ replicate 10 [return True, return False])
-
-  -- Folding asyncAnd over a big list of alternating Trues and Falses.
-  print $ runPar $ 
-    foldr asyncAnd (return True) (concat $ replicate 100 [return True, return False])
+  -- Folding asyncAnd over a list of alternating Trues and Falses.
+  print $ runPar $
+    foldr asyncAnd (return True)
+    (concat $ replicate 100 [return True, return False])
 
   -- Here's a list of lots of Trues with a stray False in the middle.
   print $ runPar $ 
-    foldr asyncAnd (return True) (concat [replicate 100 (return True), [return False], replicate 100 (return True)])
+    foldr asyncAnd (return True)
+    (concat [replicate 100 (return True), [return False],
+             replicate 100 (return True)])
 
 printAllJoins :: IO ()
 printAllJoins = do

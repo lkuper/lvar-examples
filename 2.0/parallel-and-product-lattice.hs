@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances, TypeFamilies #-}
 {-
 
 This example is a version of parallel-and-take-2.hs that uses a *real*
@@ -8,15 +8,15 @@ product lattice.
 
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
-module Main (asyncAnd, main, runPar, joinStates,
-            printAllJoins, testJoin, verifyFiniteJoin) where
+module Main{-(asyncAnd, main, runPar, joinStates,
+            printAllJoins, testJoin, verifyFiniteJoin)-} where
 
 -- For debugging only.
 import Control.LVish.Internal (liftIO)
 
 -- Don't use `asyncAnd` from the LVish library, because we're going to
 -- define our own version of it.
-import Control.LVish hiding (asyncAnd)
+import Control.LVish hiding (asyncAnd, F)
 
 -- Now let's import some stuff we need to define our own LVar.  We'll
 -- be using the `PureLVar` type provided by Data.LVar.Internal.Pure,
@@ -113,7 +113,7 @@ joinStates2 (Just (x1,y1)) (Just (x2,y2)) =
   
 -- We should only be able to look at a `Result` when it's in one of
 -- the "exactly enough information" states.
-getResult :: Result s -> Par d s State
+getResult :: HasGet e => Result s -> Par e s State
 getResult res = do
   getPureLVar res [Just (T,T), Just (F,T),
                    Just (T,F), Just (F,F)]
@@ -123,7 +123,8 @@ getResult res = do
 -- wrapped in a Par computation), creates a new LVar, launches two
 -- threads that each write a `State` into the shared LVar, and finally
 -- gets and returns the result.
-asyncAnd :: Par d s Bool -> Par d s Bool -> Par d s Bool 
+asyncAnd :: (HasGet e, HasPut e) => 
+            Par e s Bool -> Par e s Bool -> Par e s Bool 
 asyncAnd m1 m2 = do
   res <- newPureLVar bottom
   fork $ do b1 <- m1

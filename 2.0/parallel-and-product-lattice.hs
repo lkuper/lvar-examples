@@ -8,8 +8,8 @@ product lattice.
 
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
-module Main{-(asyncAnd, main, runPar, joinStates,
-            printAllJoins, testJoin, verifyFiniteJoin)-} where
+module Main (asyncAnd, main, runPar, joinStates,
+             printAllJoins, testJoin, verifyFiniteJoin) where
 
 -- For debugging only.
 import Control.LVish.Internal (liftIO)
@@ -18,12 +18,14 @@ import Control.LVish.Internal (liftIO)
 -- define our own version of it.
 import Control.LVish hiding (asyncAnd, F)
 
+import qualified Data.Set as S
+
 -- Now let's import some stuff we need to define our own LVar.  We'll
 -- be using the `PureLVar` type provided by Data.LVar.Internal.Pure,
 -- along with some functions that operate on PureLVars and the
 -- verifyFiniteJoin function.
 import Data.LVar.Internal.Pure (PureLVar, newPureLVar, putPureLVar,
-                                getPureLVar, verifyFiniteJoin)
+                                getPureLVarSets, verifyFiniteJoin)
 
 -- We'll need this later.
 import Algebra.Lattice hiding (top)
@@ -113,10 +115,18 @@ joinStates2 (Just (x1,y1)) (Just (x2,y2)) =
   
 -- We should only be able to look at a `Result` when it's in one of
 -- the "exactly enough information" states.
-getResult :: HasGet e => Result s -> Par e s State
+getResult :: HasGet e => Result s -> Par e s Bool
 getResult res = do
-  getPureLVar res [Just (T,T), Just (F,T),
-                   Just (T,F), Just (F,F)]
+  (tag,_) <- getPureLVarSets res [(False,allFalse), (True, S.singleton (Just (T,T)))]
+  return $! tag
+
+allFalse :: S.Set (Maybe (Bl, Bl))
+allFalse = S.fromList $ filter falsey [bottom .. top]
+
+falsey :: Maybe (Bl, Bl) -> Bool
+falsey (Just (F,_)) = True  
+falsey (Just (_,F)) = True
+falsey _            = False
 
 -- Now we can define an `asyncAnd` operation, which is the only way to
 -- write to a `Result`.  It takes two values of type `Bool` (each
@@ -133,8 +143,7 @@ asyncAnd m1 m2 = do
   fork $ do b2 <- m2
             putPureLVar res (Just (Bot,toBl b2))
 --            liftIO $ putStrLn $ " [dbg], got right: " ++ show b2
-  x <- getResult res
-  return $! x == Just (T,T)
+  getResult res
 
 toBl :: Bool -> Bl
 toBl True  = T
@@ -163,17 +172,17 @@ main = do
   --printAllJoins
   --testJoin
 
-  -- Folding asyncAnd over a smallish list of alternating Trues and Falses.
+  putStr "Folding asyncAnd over a smallish list of alternating Trues and Falses:  " 
   print $ runPar $
     foldr asyncAnd (return True)
     (concat $ replicate 10 [return True, return False])
 
-  -- Folding asyncAnd over a list of alternating Trues and Falses.
+  putStr "Folding asyncAnd over a list of alternating Trues and Falses:  "
   print $ runPar $
     foldr asyncAnd (return True)
     (concat $ replicate 100 [return True, return False])
 
-  -- Here's a list of lots of Trues with a stray False in the middle.
+  putStr "Here's a list of lots of Trues with a stray False in the middle:  " 
   print $ runPar $ 
     foldr asyncAnd (return True)
     (concat [replicate 100 (return True), [return False],

@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 {-
 
 This example is a version of parallel-and-take-2.hs that uses a *real*
@@ -7,8 +8,8 @@ product lattice.
 
 -- Make this a proper module, and export some stuff so we can play
 -- with it in ghci.
-module Main(asyncAnd, main, runPar, joinStates,
-            printAllJoins, testJoin, verifyFiniteJoin) where
+module Main{-(asyncAnd, main, runPar, joinStates,
+            printAllJoins, testJoin, verifyFiniteJoin)-} where
 
 -- For debugging only.
 import Control.LVish.Internal (liftIO)
@@ -25,7 +26,7 @@ import Data.LVar.Internal.Pure (PureLVar, newPureLVar, putPureLVar,
                                 getPureLVar, verifyFiniteJoin)
 
 -- We'll need this later.
-import Algebra.Lattice
+import Algebra.Lattice hiding (top)
 import Debug.Trace
 --------------------------------------------------------------------------------
 
@@ -36,34 +37,36 @@ import Debug.Trace
 -- parameter, for session sealing, and the value it's storing.
 type Result s = PureLVar s State
 
-data State = State HalfState HalfState
-  deriving (Eq, Ord, Show, Bounded)
+-- data State = Top | Pr Bl Bl
+type State = Maybe (Bl,Bl)
+--  deriving (Eq, Ord, Show, Bounded)
            
-data HalfState = Bot | T | F | Top
+data Bl = Bot | T | F 
   deriving (Eq, Ord, Show, Enum, Bounded)
 
 instance Enum State where
-  toEnum 0  = State Bot Bot
-  toEnum 1  = State Bot T
-  toEnum 2  = State Bot F
-  toEnum 3  = State T    Bot
-  toEnum 4  = State T    T
-  toEnum 5  = State T    F
-  toEnum 6  = State F    Bot
-  toEnum 7  = State F    T
-  toEnum 8  = State F    F
-  toEnum 9  = State Top Top
+  toEnum 0  = Just (Bot,Bot)
+  toEnum 1  = Just (Bot,T)
+  toEnum 2  = Just (Bot,F)
+  toEnum 3  = Just (T, Bot)
+  toEnum 4  = Just (T, T)
+  toEnum 5  = Just (T, F)
+  toEnum 6  = Just (F, Bot)
+  toEnum 7  = Just (F, T)
+  toEnum 8  = Just (F, F)
+  toEnum 9  = Nothing
+  fromEnum (Just (Bot,Bot))  = 0
+  fromEnum (Just (Bot,T))    = 1
+  fromEnum (Just (Bot,F))    = 2
+  fromEnum (Just (T,   Bot)) = 3
+  fromEnum (Just (T,   T))   = 4
+  fromEnum (Just (T,   F))   = 5
+  fromEnum (Just (F,   Bot)) = 6
+  fromEnum (Just (F,   T))   = 7
+  fromEnum (Just (F,   F))   = 8
+  fromEnum Nothing           = 9
 
-  fromEnum (State Bot Bot) = 0
-  fromEnum (State Bot T)    = 1
-  fromEnum (State Bot F)    = 2
-  fromEnum (State T    Bot) = 3
-  fromEnum (State T    T)    = 4
-  fromEnum (State T    F)    = 5
-  fromEnum (State F    Bot) = 6
-  fromEnum (State F    T)    = 7
-  fromEnum (State F    F)    = 8
-  fromEnum (State Top Top) = 9
+
 
 -- Library functions like `getPureLVar` and `putPureLVar` are defined
 -- in terms of a `join` function on states of PureLVars, and they
@@ -80,28 +83,41 @@ instance JoinSemiLattice State where
 -- seems unnecessary to me, actually, but as long as it's there, we
 -- need this instance declaration.)
 instance BoundedJoinSemiLattice State where
-  bottom = State Bot Bot
+  bottom = Just (Bot,Bot)
 
-joinHalfStates :: HalfState -> HalfState -> HalfState
-joinHalfStates x y | x == y = x
-joinHalfStates Bot x = x
-joinHalfStates Top x = Top
-joinHalfStates T F = Top
-joinHalfStates x y = joinHalfStates y x
+top :: State
+top = Nothing
+
+joinBl :: Bl -> Bl -> Maybe Bl
+joinBl x y | x == y = Just x
+joinBl Bot x        = Just x
+joinBl T F          = Nothing 
+joinBl x y          = joinBl y x
 
 -- The joinStates function computes the least upper bound of its
 -- arguments.
 joinStates :: State -> State -> State
-joinStates (State x1 y1) (State x2 y2) =
-  State (joinHalfStates x1 x2) (joinHalfStates y1 y2)
-  
+joinStates a b = 
+  do (x1,y1) <- a
+     (x2,y2) <- b
+     x3 <- joinBl x1 x2 
+     y3 <- joinBl y1 y2
+     return (x3,y3)
 
+-- Equivalently, we could have written this:
+joinStates2 Nothing _ = Nothing
+joinStates2 _ Nothing = Nothing
+joinStates2 (Just (x1,y1)) (Just (x2,y2)) = 
+  do x3 <- joinBl x1 x2 
+     y3 <- joinBl y1 y2
+     return (x3,y3)
+  
 -- We should only be able to look at a `Result` when it's in one of
 -- the "exactly enough information" states.
 getResult :: Result s -> Par d s State
 getResult res = do
-  getPureLVar res [State T T, State F T,
-                   State T F, State F F]
+  getPureLVar res [Just (T,T), Just (F,T),
+                   Just (T,F), Just (F,F)]
 
 -- Now we can define an `asyncAnd` operation, which is the only way to
 -- write to a `Result`.  It takes two values of type `Bool` (each
@@ -110,17 +126,19 @@ getResult res = do
 -- gets and returns the result.
 asyncAnd :: Par d s Bool -> Par d s Bool -> Par d s Bool 
 asyncAnd m1 m2 = do
-  res <- newPureLVar (State Bot Bot)
+  res <- newPureLVar bottom
   fork $ do b1 <- m1
-            putPureLVar res
-              (if b1 then (State T Bot) else (State F Bot))
+            putPureLVar res (Just (toBl b1,Bot))
 --            liftIO $ putStrLn $ " [dbg], got left: " ++ show b1
   fork $ do b2 <- m2
-            putPureLVar res
-              (if b2 then (State Bot T) else (State Bot F))
+            putPureLVar res (Just (Bot,toBl b2))
 --            liftIO $ putStrLn $ " [dbg], got right: " ++ show b2
   x <- getResult res
-  return $! x == State T T
+  return $! x == Just (T,T)
+
+toBl :: Bool -> Bl
+toBl True  = T
+toBl False = F
 
 -- The main function just runs a bunch of calls to asyncAnd.
 main :: IO ()
@@ -165,8 +183,8 @@ printAllJoins :: IO ()
 printAllJoins = do
   print $ showStrings
     ["join " ++ show x ++ " " ++ show y ++ " = " ++ show (joinStates x y)
-    | x <- [(State Bot Bot) .. (State Top Top)],
-      y <- [(State Bot Bot) .. (State Top Top)]]
+    | x <- [bottom .. top],
+      y <- [bottom .. top]]
   where showStrings strings = case strings of
           [] -> ""
           (x : xs) -> show x ++ "\n" ++ showStrings xs
@@ -178,9 +196,9 @@ testJoin = do
      show (if (v1 `joinLeq` v && v2 `joinLeq` v)
            then (v1 `join` v2) `joinLeq` v
            else True) -- if the premise doesn't hold, no problem
-    | v1 <- [(State Bot Bot) .. (State Top Top)],
-      v2 <- [(State Bot Bot) .. (State Top Top)],
-      v  <- [(State Bot Bot) .. (State Top Top)]]
+    | v1 <- [bottom .. top],
+      v2 <- [bottom .. top],
+      v  <- [bottom .. top]]
   where showStrings strings = case strings of
           [] -> ""
           (x : xs) -> x ++ "\n" ++ showStrings xs

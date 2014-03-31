@@ -80,6 +80,14 @@ executable parallel-and-take-2
   default-language:    Haskell2010
   ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
 
+executable parallel-and-product-lattice
+  main-is:             parallel-and-product-lattice.hs
+  build-depends:       base >=4.6 && <4.7,
+                       lvish == 1.1.2,
+                       lattices
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
 executable set-ioref-data-race
   main-is:             set-ioref-data-race.hs
   build-depends:       base >=4.6 && <4.7,

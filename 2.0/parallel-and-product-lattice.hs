@@ -152,7 +152,7 @@ toBl False = F
 -- The main function just runs a bunch of calls to asyncAnd.
 main :: IO ()
 main = do
-  putStrLn "First, a basic truth table:"
+  putStrLn "(1) First, a basic truth table:"
   -- These all work, as well.
   putStr "  asyncAnd TT: "
   print $ runPar $ asyncAnd (return True) (return True)
@@ -167,22 +167,36 @@ main = do
   putStr "  asyncAnd FF: "
   print $ runPar $ asyncAnd (return False) (return False)
 
+  putStr "(2) Now test short circuiting, one F on the left should unblock:  "
+  print $ runPar $ 
+     do v <- newPureLVar bottom
+        putPureLVar v (Just (F,Bot))
+        getResult v
+
+  putStr "  And on the right: "
+  print $ runPar $ 
+     do v <- newPureLVar bottom
+        putPureLVar v (Just (Bot,F))
+        getResult v
+  
+
   -- Just testing...
   --putStrLn $ "Verify join lattice, should return Nothing: " ++ show (verifyFiniteJoin [(State Bot Bot) .. (State Top Top)] joinStates)
   --printAllJoins
   --testJoin
 
-  putStr "Folding asyncAnd over a smallish list of alternating Trues and Falses:  " 
+  putStr "(3) Folding asyncAnd across a list: "
+  putStr "  Folding asyncAnd over a smallish list of alternating Trues and Falses:  " 
   print $ runPar $
     foldr asyncAnd (return True)
     (concat $ replicate 10 [return True, return False])
 
-  putStr "Folding asyncAnd over a list of alternating Trues and Falses:  "
+  putStr "  Folding asyncAnd over a list of alternating Trues and Falses:  "
   print $ runPar $
     foldr asyncAnd (return True)
     (concat $ replicate 100 [return True, return False])
 
-  putStr "Here's a list of lots of Trues with a stray False in the middle:  " 
+  putStr "  Here's a list of lots of Trues with a stray False in the middle:  " 
   print $ runPar $ 
     foldr asyncAnd (return True)
     (concat [replicate 100 (return True), [return False],

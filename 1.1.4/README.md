@@ -1,6 +1,6 @@
-# lvish-1.1.2 examples
+# lvish-1.1.4 examples
 
-These examples all build and run against **lvish-1.1.2**.  In
+These examples all build and run against **lvish-1.1.4**.  In
 particular, they use "determinism levels" instead of the finer-grained
 "effect levels" used in lvish-2.0 and later.  They are **not** going
 to work against lvish-2.0 and later.  For that, you want

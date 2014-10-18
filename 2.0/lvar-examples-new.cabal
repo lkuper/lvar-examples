@@ -32,7 +32,7 @@ cabal-version:       >=1.10
 
 executable repeated-4-lvar
   main-is:             repeated-4-lvar.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0
   default-language:    Haskell2010
   ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
@@ -40,14 +40,14 @@ executable repeated-4-lvar
 
 executable repeated-write-lvar-wrong
   main-is:             repeated-write-lvar-wrong.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0
   default-language:    Haskell2010
   ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
 
 executable parallel-and
   main-is:             parallel-and.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        lattices
   default-language:    Haskell2010
@@ -55,7 +55,7 @@ executable parallel-and
   
 executable set-lvar-waitsize
   main-is:             set-lvar-waitsize.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
@@ -63,7 +63,7 @@ executable set-lvar-waitsize
   
 executable set-lvar-waitelem
   main-is:             set-lvar-waitelem.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        lattices
   default-language:    Haskell2010
@@ -71,7 +71,7 @@ executable set-lvar-waitelem
 
 executable set-lvar-freezeafter
   main-is:             set-lvar-freezeafter.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
@@ -79,7 +79,7 @@ executable set-lvar-freezeafter
   
 executable set-lvar-quasi
   main-is:             set-lvar-quasi.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
@@ -87,7 +87,7 @@ executable set-lvar-quasi
   
 executable map-lvar-waitsize
   main-is:             map-lvar-waitsize.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
@@ -95,7 +95,7 @@ executable map-lvar-waitsize
 
 executable map-lvar-getkey
   main-is:             map-lvar-getkey.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers,
                        lattices
@@ -104,14 +104,14 @@ executable map-lvar-getkey
 
 executable map-lvar-getkey-lib
   main-is:             map-lvar-getkey-lib.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0
   default-language:    Haskell2010
   ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
   
 executable map-lvar-freezeafter
   main-is:             map-lvar-freezeafter.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
@@ -119,7 +119,7 @@ executable map-lvar-freezeafter
   
 executable map-lvar-quasi
   main-is:             map-lvar-quasi.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
@@ -127,7 +127,7 @@ executable map-lvar-quasi
 
 executable graph-traversal-explicit-freeze
   main-is:             graph-traversal-explicit-freeze.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
@@ -135,8 +135,25 @@ executable graph-traversal-explicit-freeze
 
 executable graph-traversal-implicit-freeze
   main-is:             graph-traversal-implicit-freeze.hs
-  build-depends:       base >=4.6 && <4.7,
+  build-depends:       base >=4.7,
                        lvish >= 2.0,
                        containers
   default-language:    Haskell2010
   ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable paul-question
+  main-is:             paul-question.hs
+  build-depends:       base >=4.7,
+                       lvish >= 2.0,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+
+executable paul-question-2
+  main-is:             paul-question-2.hs
+  build-depends:       base >=4.7,
+                       lvish >= 2.0,
+                       containers
+  default-language:    Haskell2010
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N2
+

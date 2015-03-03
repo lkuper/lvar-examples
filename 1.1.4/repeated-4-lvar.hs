@@ -3,14 +3,13 @@
 
 {-# LANGUAGE DataKinds #-}
 
-import Control.LVish  -- Generic scheduler; works with any lattice.
-import Data.LVar.IVar -- The particular lattice in question.
+import Control.LVish  -- Generic scheduler; works with all LVars.
+import Data.LVar.IVar -- The particular LVar we need for this program.
 
 p :: Par Det s Int
-p = do
-  num <- new
-  fork (put num 4)
-  fork (put num 4)
-  get num
+p = do num <- new
+       fork (put num 4)
+       fork (put num 4)
+       get num
 
-main = print $ runPar p
+main = print (runPar p)

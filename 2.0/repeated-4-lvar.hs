@@ -7,11 +7,13 @@
 import Control.LVish  -- Generic scheduler; works with any lattice.
 import Data.LVar.IVar -- The particular lattice in question.
 
-p :: (HasPut e, HasGet e) => Par e s Int
-p = do
-  num <- new
-  fork (put num 4)
-  fork (put num 4)
-  get num
+import Control.LVish  -- Generic scheduler; works with all LVars.
+import Data.LVar.IVar -- The particular LVar we need for this program.
 
-main = print $ runPar p
+p :: (HasPut e, HasGet e) => Par e s Int
+p = do num <- new
+       fork (put num 4)
+       fork (put num 4)
+       get num
+
+main = print (runPar p)

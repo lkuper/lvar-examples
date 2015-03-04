@@ -1,7 +1,6 @@
 -- This program writes the same thing twice and deterministically
 -- prints `4` instead of raising an error.
 
-{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeFamilies #-}
 
 import Control.LVish  -- Generic scheduler; works with any lattice.

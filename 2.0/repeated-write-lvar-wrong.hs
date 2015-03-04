@@ -1,7 +1,6 @@
 -- This program attempts to do two conflicting writes to an LVar and
 -- deterministically raises an error.
 
-{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeFamilies #-}
 
 import Control.LVish  -- Generic scheduler; works with any lattice.

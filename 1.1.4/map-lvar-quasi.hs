@@ -13,13 +13,10 @@ data Item = Book | Shoes
 p :: Par QuasiDet s (M.Map Item Int)
 p = do
   cart <- newEmptyMap
-  fork $ insert Book 1 cart
-  fork $ do liftIO $ threadDelay 1 -- Might have to tweak this number
-                                   -- to see the quasi-determinism.
-            insert Shoes 1 cart
-  getKey Book cart -- Note the under-synchronization.
+  fork (insert Book 1 cart)
+  fork (do liftIO (threadDelay 1); -- Might have to tweak this number to see quasi-determinism.
+            insert Shoes 1 cart)
   freezeMap cart
 
-main = do
-  v <- runParIO p
-  print v
+main = do v <- runParIO p
+          print v

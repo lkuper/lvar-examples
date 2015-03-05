@@ -10,8 +10,8 @@ data Item = Book | Shoes
 p :: Par Det s Int
 p = do
   cart <- newEmptyMap
-  fork $ insert Book 2 cart
-  fork $ insert Shoes 1 cart
+  fork (insert Book 2 cart)
+  fork (insert Shoes 1 cart)
   getKey Book cart
 
-main = print $ runPar p
+main = print (runPar p)

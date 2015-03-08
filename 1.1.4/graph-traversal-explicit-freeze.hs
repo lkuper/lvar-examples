@@ -1,7 +1,7 @@
 {-# LANGUAGE DataKinds #-}
 
 import Control.LVish
-import Control.LVish.DeepFrz
+import Control.LVish.DeepFrz -- provides Frzn
 import Data.LVar.Generic (addHandler, freeze)
 import Data.LVar.PureSet
 import qualified Data.Graph as G
@@ -49,5 +49,5 @@ newHandler seen f = do
   return hp
 
 main = do
-  v <- runParIO $ traverse myGraph (0 :: G.Vertex)
-  print $ fromISet v
+  v <- runParIO (traverse myGraph (0 :: G.Vertex))
+  print (fromISet v)

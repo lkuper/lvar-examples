@@ -31,7 +31,8 @@ neighbors g v =
   map snd edgesFromNode where
     edgesFromNode = filter (\(v1, _) -> v1 == v) (G.edges g)
 
-traverse :: HasPut e => G.Graph -> Int -> Par e s (ISet s Int)
+traverse :: HasPut e =>
+            G.Graph -> Int -> Par e s (ISet s Int)
 traverse g startNode = do
   seen <- newEmptySet
   h <- newHandler seen
@@ -47,5 +48,5 @@ newHandler seen f = do
   addHandler (Just hp) seen f
   return hp
 
-main = print $ runParThenFreeze $ traverse myGraph (0 :: G.Vertex)
+main = print (runParThenFreeze (traverse myGraph (0 :: G.Vertex)))
 

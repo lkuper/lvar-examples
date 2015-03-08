@@ -9,8 +9,8 @@ data Item = Book | Shoes
 
 -- LK: Do we actually need this instance?  We seem to be able to get
 -- away without it!  Look into this.
--- instance DeepFrz Item where type
--- FrzType Item = Item
+-- instance DeepFrz Item where
+--   type FrzType Item = Item
 
 p :: (HasPut e, HasGet e) => Par e s (IMap Item s Int)
 p = do

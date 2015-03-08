@@ -2,7 +2,6 @@
 
 import Control.Concurrent (threadDelay)
 import Control.LVish
-import Control.LVish.DeepFrz
 import Control.LVish.Internal (liftIO)
 import Data.LVar.PureMap
 import qualified Data.Map as M

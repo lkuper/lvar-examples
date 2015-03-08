@@ -14,8 +14,8 @@ instance DeepFrz Item where
 p :: Par Det s (IMap Item s Int)
 p = do
   cart <- newEmptyMap
-  fork $ insert Book 1 cart
-  fork $ insert Shoes 1 cart
+  fork (insert Book 1 cart)
+  fork (insert Shoes 1 cart)
   return cart
 
-main = print $ runParThenFreeze p
+main = print (runParThenFreeze p)

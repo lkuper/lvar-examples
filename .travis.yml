@@ -28,6 +28,7 @@ install:
  - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
  - travis_retry cabal update
  - cabal install -j ./lvars/haskell/par-classes/ ./lvars/haskell/par-collections/ ./lvars/haskell/par-transformers/ happy alex
+ - cabal install monad-par # needed for some of the lvar-examples-old examples
  # Install both needed versions of lvish, from Hackage and from git, respectively:
  - cabal install lvish-1.1.4
  - cabal install ./lvars/haskell/lvish/

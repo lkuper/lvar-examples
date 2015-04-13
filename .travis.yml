@@ -12,7 +12,7 @@ env:
 # We have to allow lvish 1.1.4 to fail with these two, since it requires an earlier version of base.
 matrix:
   allow_failures:
-    - env: CABALVER=1.22 GCHVER=7.10.1
+    - env: CABALVER=1.22 GHCVER=7.10.1
     - env: CABALVER=head GHCVER=head
 
 # Note: the distinction between `before_install` and `install` is not important.

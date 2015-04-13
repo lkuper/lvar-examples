@@ -9,6 +9,12 @@ env:
  - CABALVER=1.22 GHCVER=7.10.1
  - CABALVER=head GHCVER=head   # see section about GHC HEAD snapshots
 
+# We have to allow lvish 1.1.4 to fail with these two, since it requires an earlier version of base.
+matrix:
+  allow_failures:
+    - env: CABALVER=1.22 GCHVER=7.10.1
+    - env: CABALVER=head GHCVER=head
+
 # Note: the distinction between `before_install` and `install` is not important.
 before_install:
  - git submodule update --init
@@ -24,7 +30,7 @@ install:
  - cabal install -j ./lvars/haskell/par-classes/ ./lvars/haskell/par-collections/ ./lvars/haskell/par-transformers/ happy alex
  # Install both needed versions of lvish, from Hackage and from git, respectively:
  - cabal install lvish-1.1.4
- - cabal install --only-dependencies --enable-tests --enable-benchmarks ./lvars/haskell/lvish/
+ - cabal install ./lvars/haskell/lvish/
 
 # Here starts the actual work to be performed for the package under test; any command which exits with a non-zero exit code causes the build to fail.
 script:

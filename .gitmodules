@@ -1,4 +1,4 @@
 [submodule "lvars"]
 	path = lvars
 	url = https://github.com/iu-parfunc/lvars/
-	branch = 2.0-exposed
+	branch = master

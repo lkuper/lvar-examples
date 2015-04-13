@@ -22,6 +22,8 @@ install:
  - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
  - travis_retry cabal update
  - cabal install -j ./lvars/haskell/par-classes/ ./lvars/haskell/par-collections/ ./lvars/haskell/par-transformers/ happy alex
+ # Install both needed versions of lvish, from Hackage and from git, respectively:
+ - cabal install lvish-1.1.4
  - cabal install --only-dependencies --enable-tests --enable-benchmarks ./lvars/haskell/lvish/
 
 # Here starts the actual work to be performed for the package under test; any command which exits with a non-zero exit code causes the build to fail.

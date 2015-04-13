@@ -23,18 +23,17 @@ You can install LVish
 install the most recently released version, which, as of this writing,
 is **lvish-1.1.4**.
 
-If you want the newest version of lvish -- which has more cool
-features than the 1.x releases do -- you'll have to install it from
-git.  Something like this should work:
+If you want the newest, unreleased version of lvish -- which has more
+cool features than the 1.x releases do -- you'll have to install it
+from git, which is why this repository has the
+[lvars](https://github.com/iu-parfunc/lvars/) repo as a submodule.
+There are also various dependencies that need to be installed -- if
+you have trouble, I recommend looking at what the
+[.travis.yml](https://github.com/lkuper/lvar-examples/blob/master/.travis.yml)
+script does.
 
-``` bash
-git clone git@github.com:iu-parfunc/lvars.git
-cd lvars/haskell/lvish/
-cabal install
-```
-
-Then, depending on whether you have **lvish-1.1.4** or **lvish-2.0.x**
-installed, go
+Then, depending on whether you have **lvish-1.1.4** or some flavor of
+**lvish-2.0** installed, go
 [here](https://github.com/lkuper/lvar-examples/tree/master/1.1.4) or
 [here](https://github.com/lkuper/lvar-examples/tree/master/2.0).
 Enjoy!

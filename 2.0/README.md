@@ -5,7 +5,7 @@ particular, they use "effect levels" instead of the more
 coarse-grained "determinism levels" in previous releases of lvish.)
 They are **not** going to work against earlier releases of lvish.  For
 that, you want
-[this directory](https://github.com/lkuper/lvar-examples/tree/master/1.1.2).
+[this directory](https://github.com/lkuper/lvar-examples/tree/master/1.1.4).
 
 ## Building and running the examples
 
@@ -33,7 +33,7 @@ $ while true; do ./dist/build/repeated-4-lvar/repeated-4-lvar; done
 
 Coming soon!
 
-## Examples ported from lvish-1.1.2
+## Examples ported from lvish-1.1.4
 
 ### Basic examples
 

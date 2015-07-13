@@ -6,7 +6,7 @@ import qualified Control.Par.ST.Vec as V
 import Control.Monad (void)
 import Data.Vector (freeze, toList)
 
-p :: (HasGet e, HasPut e) => PST.ParST (PST.MVectorFlp String s1) Par e s [String]
+p :: (HasGet e, HasPut e) => V.ParVecT s1 String Par e s [String]
 p = do
   -- Fill all six ten slots in the vector with "foo".
   V.set "foo"

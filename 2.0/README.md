@@ -132,3 +132,9 @@ possible to threshold on the key and get back the value.
   * `graph-traversal-explicit-freeze`
   
   * `graph-traversal-implicit-freeze`
+
+### Disjoint parallel update example
+
+See section 4.3 of my dissertation for documentation about this one.
+
+  * `disjoint-parallel-update`

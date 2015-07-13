@@ -8,7 +8,7 @@ import Data.Vector (freeze, toList)
 
 p :: (HasGet e, HasPut e) => V.ParVecT s1 String Par e s [String]
 p = do
-  -- Fill all six ten slots in the vector with "foo".
+  -- Fill all six slots in the vector with "foo".
   V.set "foo"
   -- Get a pointer to the state.
   ptr <- V.reify

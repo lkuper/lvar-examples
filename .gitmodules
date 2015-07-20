@@ -2,3 +2,6 @@
 	path = lvars
 	url = https://github.com/iu-parfunc/lvars/
 	branch = master
+[submodule "concurrent-skiplist"]
+	path = concurrent-skiplist
+	url = https://github.com/rrnewton/concurrent-skiplist.git

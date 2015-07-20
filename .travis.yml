@@ -17,7 +17,8 @@ matrix:
 
 # Note: the distinction between `before_install` and `install` is not important.
 before_install:
- - git submodule update --init
+ # This needs to be recursive in order to pick up submodules of the lvars submodule.
+ - git submodule update --init --recursive
  - travis_retry sudo add-apt-repository -y ppa:hvr/ghc
  - travis_retry sudo apt-get update
  - travis_retry sudo apt-get install cabal-install-$CABALVER ghc-$GHCVER # see note about happy/alex
@@ -27,7 +28,7 @@ install:
  - cabal --version
  - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
  - travis_retry cabal update
- - cabal install -j ./lvars/haskell/par-classes/ ./lvars/haskell/par-collections/ ./lvars/haskell/par-transformers/ happy alex
+ - cabal install -j ./lvars/haskell/par-classes/ ./lvars/haskell/par-collections/ ./lvars/haskell/par-transformers/ ./lvars/haskell/concurrent-skiplist/ happy alex
  - cabal install monad-par # needed for some of the lvar-examples-old examples
  # Install both needed versions of lvish, from Hackage and from git, respectively:
  - cabal install lvish-1.1.4

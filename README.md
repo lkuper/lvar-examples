@@ -17,22 +17,31 @@ one of those.
 
 ## Installing LVish
 
+### LVish 1.1.4
+
 You can install LVish
 [from Hackage](http://hackage.haskell.org/package/lvish) by running
 `cabal install lvish` (perhaps preceded by `cabal update`).  That will
 install the most recently released version, which, as of this writing,
 is **lvish-1.1.4**.
 
+### LVish 2.0
+
 If you want the newest, unreleased version of lvish -- which has more
 cool features than the 1.x releases do -- you'll have to install it
 from git, which is why this repository has the
-[lvars](https://github.com/iu-parfunc/lvars/) repo as a submodule.
-There are also various dependencies that need to be installed -- if
-you have trouble, I recommend looking at what the
-[.travis.yml](https://github.com/lkuper/lvar-examples/blob/master/.travis.yml)
-script does.
+[lvars](https://github.com/iu-parfunc/lvars/) repo as a submodule.  I
+recommend doing the following:
 
-Then, depending on whether you have **lvish-1.1.4** or some flavor of
+  * Make sure you've pulled the `lvars` submodule, and its submodules.  Something like `git submodule update --init --recursive` should work.
+  * Go into the `2.0` subdirectory.
+  * Create a new sandbox in that directory with `cabal sandbox init`.
+  * Run `cabal install -j ../lvars/haskell/par-classes/ ../lvars/haskell/par-collections/ ../lvars/haskell/par-transformers/ ../lvars/haskell/concurrent-skiplist/ happy alex`.
+  * Run `cabal install ../lvars/haskell/lvish/` and cross your fingers.
+
+## Then what?
+
+Depending on whether you have **lvish-1.1.4** or some flavor of
 **lvish-2.0** installed, go
 [here](https://github.com/lkuper/lvar-examples/tree/master/1.1.4) or
 [here](https://github.com/lkuper/lvar-examples/tree/master/2.0).

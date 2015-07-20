@@ -27,16 +27,14 @@ is **lvish-1.1.4**.
 
 ### LVish 2.0
 
-If you want the newest, unreleased version of lvish -- which has more
+If you want the newest, unreleased version of LVish -- which has more
 cool features than the 1.x releases do -- you'll have to install it
-from git, which is why this repository has the
-[lvars](https://github.com/iu-parfunc/lvars/) repo as a submodule.  I
-recommend doing the following:
+from git.  I recommend the following:
 
-  * Make sure you've pulled the `lvars` submodule, and its submodules.  Something like `git submodule update --init --recursive` should work.
+  * Make sure you've pulled the `lvars` and `concurrent-skiplist` submodules.  Something like `git submodule update --init` should work.  (`lvars` contains the LVish library and some of its friends; `concurrent-skiplist` is one of LVish's dependencies.)
   * Go into the `2.0` subdirectory.
   * Create a new sandbox in that directory with `cabal sandbox init`.
-  * Run `cabal install -j ../lvars/haskell/par-classes/ ../lvars/haskell/par-collections/ ../lvars/haskell/par-transformers/ ../lvars/haskell/concurrent-skiplist/ happy alex`.
+  * Run `cabal install -j ../lvars/haskell/par-classes/ ../lvars/haskell/par-collections/ ../lvars/haskell/par-transformers/ ../concurrent-skiplist/ happy alex`.
   * Run `cabal install ../lvars/haskell/lvish/` and cross your fingers.
 
 ## Then what?
